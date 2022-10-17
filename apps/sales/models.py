@@ -120,10 +120,6 @@ class OrderDetail(models.Model):
     # Cantidad de detalle del pedido
     quantity = models.PositiveIntegerField(default=0, verbose_name="Cantidad")
 
-    # require: from django.core.validators
-    percent_discount = models.PositiveSmallIntegerField(default=0, validators=[
-                                                        MinValueValidator(0), MaxValueValidator(60)], verbose_name="Descuento (%)")
-
     # Atributo "discount_amount" => columna "discount_amount" de la tabla
     # Monto de Descuento
     discount_amount = models.DecimalField(
