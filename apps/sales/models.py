@@ -159,5 +159,10 @@ class OrderDetail(models.Model):
             self.id_product.sale_price = float(self.id_product.base_sale_price) - \
                 float(abs(self.discount_amount))
         
+        # Verificamos la cantidad del stock
+        if(self.id_product.stock > 0 and self.quantity <= self.id_product.stock):
+            # Descontamos la cantidad del stock
+            self.id_product.stock = self.id_product.stock - self.quantity
+
         # Guardamos información del modelo
         super(OrderDetail, self).save(*args, **kwargs)
