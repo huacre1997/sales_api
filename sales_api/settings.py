@@ -46,7 +46,9 @@ DJANGO_APPS = [
 # Aplicaciones de terceros
 THIRD_PARTY_APPS = [
     "rest_framework",
+    "corsheaders",
     "debug_toolbar",
+    'django_filters',
 ]
 # Aplicaciones locales que se creó
 LOCAL_APPS = [
