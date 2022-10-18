@@ -82,8 +82,9 @@ MIDDLEWARE = [
 ]
 
 CORS_ORIGIN_WHITELIST = (
-    'http://localhost:8000'
+    'http://localhost:8000',
 )
+
 
 ROOT_URLCONF = 'sales_api.urls'
 
