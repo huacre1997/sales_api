@@ -4,30 +4,49 @@ from django.db import models
 # Importamos las clases MinValueValidator, MaxValueValidator para agregar validaciones al atributo "percent_discount"
 from django.core.validators import MinValueValidator, MaxValueValidator
 
-# Importamos la clase Currency de la aplicación Sales
-from apps.sales.models import Currency
+from utils.models import ModelBase
 
 # Create your models here.
 
-class UnitMeasureCategory(models.Model):
+
+class Currency(ModelBase):
+    """
+    Clase Moneda.
+    Ejemplo 1: Moneda Sol
+    Código: PEN
+    Simbolo: S/.
+    Nombre: Sol Peruano
+    Ejemplo 2: Moneda Dólares Americanos.
+    Código: USD
+    Simbolo: $.
+    Nombre: Dólares Americanos
+    """
+    code = models.CharField(max_length=3, unique=True, verbose_name="Código")
+    symbol = models.CharField(max_length=4, verbose_name="Simbolo")
+    name = models.CharField(max_length=20, verbose_name="Nombre")
+
+    def __str__(self):
+        return f"{self.symbol} {self.code}"
+
+    class Meta:
+        db_table = "currency"
+        verbose_name = "Moneda"
+        verbose_name_plural = "Monedas"
+
+
+class UnitMeasureCategory(ModelBase):
     """
     Clase de Categoría de Unidades de Medida
     Ejemplo: Peso,  Volumen, Longitud
     """
-    #Autofield : autoincremental
-    id = models.AutoField(primary_key=True,verbose_name="Código")
-    name =  models.CharField(max_length=30,verbose_name="Nombre de categoría")
-    #auto_now_add : se agrega automáticamente cuando ocurre un nuevo registro
-    created_at = models.DateTimeField(auto_now_add=True,verbose_name="Fecha de creación")
-    #auto_new_add : se agrega automáticamente cuando ocurre se actualiza el registro
-    update_at = models.DateTimeField(auto_now=True,verbose_name="Fecha de modificación")
+    name = models.CharField(max_length=30, verbose_name="Nombre de categoría")
 
     def __str__(self) -> str:
         """
         Método para devolver un string que represente al objeto
         """
         return self.name
-    
+
     class Meta:
         """
         Clase Meta:
@@ -36,81 +55,81 @@ class UnitMeasureCategory(models.Model):
         # Nombre que recibirá nuestro modelo en la base de datos.
         db_table = "unit_measure_category"
         # Texto que aparecerá en nuestra aplicación.
-        verbose_name = "Categoría de Unidades de Medida"
-    
+        verbose_name = "Categoría de Unidad de Medida"
 
-class UnitMeasure(models.Model):
+        # Texto que aparecerá en nuestra aplicación en plural.
+
+        verbose_name_plural = "Categorías de Unidad de Medida"
+
+
+class UnitMeasure(ModelBase):
     """
     Clase de Unidad de Medida
     Ejemplo: Kg -> Categoría (Peso), g -> Categoría (Peso), l -> Categoría (Volumen), ml
     """
-    id = models.AutoField(primary_key=True,verbose_name="Código")
-    name = models.CharField(max_length=30,verbose_name="Nombre") 
+    name = models.CharField(max_length=30, verbose_name="Nombre")
     # foreign_key: categoría de unidad de medida
-    unit_measure_category_id = models.ForeignKey(UnitMeasureCategory,on_delete=models.CASCADE,default=None,verbose_name="Categoría de Unidad de Medida")
-    created_at = models.DateTimeField(auto_now_add=True,verbose_name="Fecha de creación")
-    update_at = models.DateTimeField(auto_now=True,verbose_name="Fecha de modificación")
+    unit_measure_category = models.ForeignKey(
+        UnitMeasureCategory, on_delete=models.CASCADE, default=None, verbose_name="Categoría de Unidad de Medida")
 
     def __str__(self):
         return self.name
-    
+
     class Meta:
         db_table = "unit_measure"
-        verbose_name = "Unidades de Medida"
+        verbose_name = "Unidad de Medida"
+        verbose_name_plural = "Unidades de medida"
 
 
-class ProductCategory(models.Model):
+class ProductCategory(ModelBase):
     """
     Clase de Categoría del producto
     Ejemplo: Lacteós, Bebidas, Carnes, Pastas
     """
-    id = models.AutoField(primary_key=True,verbose_name="Código")
-    name = models.CharField(max_length=30,verbose_name="Nombre")
+    name = models.CharField(max_length=30, verbose_name="Nombre")
     # PositiveSmallIntegerField : Entero positivo pequeño
-    percent_discount = models.PositiveSmallIntegerField(default=0, validators=[MinValueValidator(0), MaxValueValidator(75)], verbose_name="Descuento (%)")
-    created_at = models.DateTimeField(auto_now_add=True,verbose_name="Fecha de creación")
-    update_at = models.DateTimeField(auto_now=True,verbose_name="Fecha de modificación")
+    percent_discount = models.PositiveSmallIntegerField(default=0, validators=[
+                                                        MinValueValidator(0), MaxValueValidator(75)], verbose_name="Descuento (%)")
 
     def __str__(self):
         return self.name
 
-    def save(self, *args, **kwargs):
-        super(ProductCategory, self).save(*args, **kwargs)
-
     class Meta:
         db_table = "product_category"
         verbose_name = "Categoría de Producto"
+        verbose_name_plural = "Categorías de Producto"
 
 
-class Product(models.Model):
+class Product(ModelBase):
     """
     Clase de Producto
     """
-    id = models.AutoField(primary_key=True)
-    code = models.CharField(max_length=5,unique=True,verbose_name="Código")
-    name = models.CharField(max_length=60,blank=False,verbose_name="Nombre")
+    code = models.CharField(max_length=5, unique=True, verbose_name="Código")
+    name = models.CharField(max_length=60, blank=False, verbose_name="Nombre")
 
     # foreign_key: categoría de producto
-    product_category_id = models.ForeignKey(ProductCategory,on_delete=models.CASCADE,default=None,verbose_name="Categoría Producto")
+    product_category = models.ForeignKey(
+        ProductCategory, on_delete=models.CASCADE, default=None, verbose_name="Categoría Producto")
     # foreign_key: unidad de medida
-    unit_measure_id = models.ForeignKey(UnitMeasure,on_delete=models.CASCADE,default=None,verbose_name="Unidad de Medida")
+    unit_measure = models.ForeignKey(
+        UnitMeasure, on_delete=models.CASCADE, default=None, verbose_name="Unidad de Medida")
     # foreign_key: divisa
-    currency_id = models.ForeignKey(Currency,on_delete=models.CASCADE,default=None,verbose_name="Moneda")
+    currency = models.ForeignKey(
+        Currency, on_delete=models.CASCADE, default=None, verbose_name="Moneda")
     # precio de venta base
-    base_sale_price = models.DecimalField(max_digits=7, decimal_places=2, default=0, verbose_name="Precio de Venta Base")
+    base_sale_price = models.DecimalField(
+        max_digits=7, decimal_places=2, default=0, verbose_name="Precio de Venta Base")
     # require: from django.core.validators
-    percent_discount = models.PositiveSmallIntegerField(default=0, validators=[MinValueValidator(0), MaxValueValidator(75)], verbose_name="Descuento (%)")
+    percent_discount = models.PositiveSmallIntegerField(default=0, validators=[
+                                                        MinValueValidator(0), MaxValueValidator(75)], verbose_name="Descuento (%)")
     # monto de descuento
-    discount_amount = models.DecimalField(max_digits=7, decimal_places=2, default=0, verbose_name="Monto Descuento")
+    discount_amount = models.DecimalField(
+        max_digits=7, decimal_places=2, default=0, verbose_name="Monto Descuento")
     # precio de venta
-    sale_price = models.DecimalField(max_digits=7, decimal_places=2, default=0, verbose_name="Precio de Venta")
+    sale_price = models.DecimalField(
+        max_digits=7, decimal_places=2, default=0, verbose_name="Precio de Venta")
     # stock: PositiveIntegerField
     stock = models.PositiveIntegerField(default=0, verbose_name="Stock")
-    # Activo: BooleanField
-    active = models.BooleanField(default=True, verbose_name="Activo")
-
-    created_at = models.DateTimeField(auto_now_add=True, verbose_name="Fecha Creación")
-    updated_at = models.DateTimeField(auto_now=True, verbose_name="Fecha Modificación")
 
     def __str__(self):
         return self.name
@@ -120,14 +139,17 @@ class Product(models.Model):
         Sobre escribimos el método save de la clase Model.
         """
         # Calculamos el monto de descuento
-        self.discount_amount = round((int(self.percent_discount)/100)*float(self.base_sale_price),2)
-        
+        self.discount_amount = round(
+            (int(self.percent_discount) / 100) * float(self.base_sale_price), 2)
+
         # Calculamos el precio de venta
-        self.sale_price = float(self.base_sale_price) - float(abs(self.discount_amount))
-        
+        self.sale_price = float(self.base_sale_price) - \
+            float(abs(self.discount_amount))
+
         # Guardamos información del modelo
         super(Product, self).save(*args, **kwargs)
 
     class Meta:
         db_table = "product"
         verbose_name = "Producto"
+        verbose_name_plural = "Productos"

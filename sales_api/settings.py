@@ -34,7 +34,7 @@ INTERNAL_IPS = [
 
 # Application definition
 
-#Aplicaciones por defecto de Django
+# Aplicaciones por defecto de Django
 DJANGO_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -43,16 +43,16 @@ DJANGO_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 ]
-#Aplicaciones de terceros
+# Aplicaciones de terceros
 THIRD_PARTY_APPS = [
     "rest_framework",
     "debug_toolbar",
 ]
 # Aplicaciones locales que se creó
 LOCAL_APPS = [
-    "apps.crm.apps.CrmConfig",
-    "apps.sales.apps.SalesConfig",
-    "apps.warehouse.apps.WarehouseConfig",
+    "apps.crm",
+    "apps.sales",
+    "apps.warehouse",
 ]
 
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
