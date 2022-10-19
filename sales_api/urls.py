@@ -21,6 +21,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('api-auth/', include('rest_framework.urls')),
     path('api/warehouse/', include("apps.warehouse.api.urls")),
+    path('api/crm/', include("apps.crm.api.urls"))
 
 ]
 if settings.DEBUG and "debug_toolbar" in settings.INSTALLED_APPS:
