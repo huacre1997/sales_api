@@ -25,12 +25,12 @@ class CustomerCategoryViewSet(ModelViewSet):
     # Configuración para que el VIEW sea utilizado por usuarios autenticados.
     #permission_classes = [IsAuthenticated]
 
-    #filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
-    #filterset_fields = ['name']
+    filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
+    filterset_fields = ['name']
 
-    #search_fields = ['name']
+    search_fields = ['name']
 
-    #ordering_fields = ['id']
+    ordering_fields = ['id']
 
 class GetCustomerCategoryWithToken(APIView):
 
