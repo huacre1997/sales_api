@@ -40,12 +40,12 @@ class GetCustomerCategoryWithToken(APIView):
         except CustomerCategory.DoesNotExist:
             pass
         
-        product_category_serializer = CustomerCategorySerializer(
+        customer_category_serializer = CustomerCategorySerializer(
             customer_category
         )
 
         payload = {
-            'product_category': product_category_serializer.data
+            'customer_category': customer_category_serializer.data
         }
 
         return JsonResponse(payload)
