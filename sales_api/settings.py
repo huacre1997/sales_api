@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.1/ref/settings/
 """
 
+from datetime import timedelta
 from pathlib import Path
 import os
 
@@ -46,6 +47,8 @@ DJANGO_APPS = [
 # Aplicaciones de terceros
 THIRD_PARTY_APPS = [
     "rest_framework",
+    'rest_framework_simplejwt',
+    'rest_framework_simplejwt.token_blacklist',  # BlackList TOKENS
     "corsheaders",
     "debug_toolbar",
     'django_filters',
@@ -61,15 +64,6 @@ LOCAL_APPS = [
 
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
 
-REST_FRAMEWORK = {
-    # 'DEFAULT_AUTHENTICATION_CLASSES': ('rest_framework.authentication.TokenAuthentication', 'rest_framework.authentication.SessionAuthentication'),
-    # 'DEFAULT_PERMISSION_CLASSES': [
-    #   'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'
-    # ],
-    # 'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
-    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
-    'PAGE_SIZE': 2
-}
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -123,6 +117,44 @@ DATABASES = {
 }
 
 
+# Swagger
+# https://drf-yasg.readthedocs.io/en/stable/readme.html
+SWAGGER_SETTINGS = {
+    'SECURITY_DEFINITIONS': {
+        'Bearer': {
+            'type': 'apiKey',
+            'name': 'Authorization',
+            'in': 'header'
+        }
+    }
+}
+
+
+# Django Rest Framework
+# https://www.django-rest-framework.org/#installation
+REST_FRAMEWORK = {
+    # Autenticación JWT
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    ),
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
+    'PAGE_SIZE': 2
+}
+# Simple JWT
+# https://django-rest-framework-simplejwt.readthedocs.io/en/latest/#
+SIMPLE_JWT = {
+    # Tiempo de vida del access token
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=5),
+    
+    # Tiempo de vida del refresh token
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=90),
+    
+    # Genera un nuevo access_token  cuando se hace refresh token es enviado al TokenRefreshView
+    'ROTATE_REFRESH_TOKENS': True,
+    
+    # Envia el token a Blacklit si se envía el refresh token al TokenRefreshView
+    'BLACKLIST_AFTER_ROTATION': True,
+}
 # Password validation
 # https://docs.djangoproject.com/en/4.1/ref/settings/#auth-password-validators
 
