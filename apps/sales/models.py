@@ -1,6 +1,6 @@
 from django.db import models
 
-# Importamos la clase District,Customer de la app warehouse
+# Importamos la clase District,Customer de la apps crm
 from apps.crm.models import District, Customer
 from apps.warehouse.models import Product
 from utils.models import ModelBase
@@ -62,7 +62,7 @@ class Order(ModelBase):
     # Atributo "number_order" => columna "number_order" de la tabla
     # Numero del pedido
     code = models.CharField(
-        max_length=9, unique=True, null=False, blank=False, verbose_name="Número del Pedido")
+        max_length=9, unique=True, null=False, verbose_name="Número del Pedido")
 
     # foreign_key: Cliente
     customer = models.ForeignKey(Customer, on_delete=models.CASCADE,

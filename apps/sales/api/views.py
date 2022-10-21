@@ -1,3 +1,5 @@
+from asyncio.windows_events import NULL
+from venv import create
 from rest_framework.viewsets import ModelViewSet
 from rest_framework.views import APIView
 from apps.sales.models import Delivery,Order,OrderDetail
@@ -10,6 +12,8 @@ from rest_framework import status
 
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import filters
+
+import datetime
 
 class DeliveryViewSet(ModelViewSet):
     """
@@ -46,6 +50,30 @@ class OrderViewSet(ModelViewSet):
     search_fields = ['customer']
 
     ordering_fields = ['id']
+
+    def create(self, request, format=None):
+        # Obtenemos todos los registros de la bd
+        all_records = Order.objects.all()
+        # Obtenemos la cantidad de registros de la bd
+        code_db = all_records.count()
+        # Sumamos 1 a la cantidad de registros de la bd
+        code_db = code_db + 1
+        # Añadimos ceros a la izquierda de code_db casteado a string
+        code_db_str = str(code_db).zfill(5)
+
+        # Obtenemos el año actual
+        date = datetime.date.today()
+        year = date.strftime("%Y")
+        year_str = str(year)
+
+        # Concatenamos el año y el numero de pedido
+        order_number = year_str + code_db_str
+        request.data['code'] = order_number
+        serializer_class = OrderSerializer(data=request.data)
+        if serializer_class.is_valid():
+            serializer_class.save()
+            return Response(serializer_class.data, status=status.HTTP_201_CREATED)
+        return Response(serializer_class.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class OrderDetailViewSet(ModelViewSet):
     """
