@@ -121,10 +121,10 @@ DATABASES = {
 # https://drf-yasg.readthedocs.io/en/stable/readme.html
 SWAGGER_SETTINGS = {
     'SECURITY_DEFINITIONS': {
-        'Bearer': {
+        'api_key': {
             'type': 'apiKey',
-            'name': 'Authorization',
-            'in': 'header'
+            'in': 'header',
+            'name': 'Authorization'
         }
     }
 }
@@ -144,16 +144,17 @@ REST_FRAMEWORK = {
 # https://django-rest-framework-simplejwt.readthedocs.io/en/latest/#
 SIMPLE_JWT = {
     # Tiempo de vida del access token
-    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=5),
-    
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=90),
+
     # Tiempo de vida del refresh token
     'REFRESH_TOKEN_LIFETIME': timedelta(days=90),
-    
+
     # Genera un nuevo access_token  cuando se hace refresh token es enviado al TokenRefreshView
     'ROTATE_REFRESH_TOKENS': True,
-    
+
     # Envia el token a Blacklit si se envía el refresh token al TokenRefreshView
     'BLACKLIST_AFTER_ROTATION': True,
+
 }
 # Password validation
 # https://docs.djangoproject.com/en/4.1/ref/settings/#auth-password-validators
@@ -177,14 +178,17 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/4.1/topics/i18n/
 
-LANGUAGE_CODE = 'es-pe'
+LANGUAGE_CODE = 'es'
 
 TIME_ZONE = 'America/Lima'
 
+SITE_ID = 1
+
 USE_I18N = True
 
-USE_TZ = True
-
+USE_L10N = False
+THOUSAND_SEPARATOR = "."
+USE_TZ = False
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.1/howto/static-files/

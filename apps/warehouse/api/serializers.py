@@ -1,11 +1,14 @@
-from rest_framework.serializers import ModelSerializer
+from rest_framework import serializers
 from apps.warehouse.models import ProductCategory
+from utils.serializers import BaseSerializer
 
-class ProductCategorySerializer(ModelSerializer):
+
+class ProductCategorySerializer(BaseSerializer):
     """
     Clase para convertir un objeto ProductCategory a un formato JSON.
     """
+    name = serializers.CharField(required=False, max_length=100)
+
     class Meta:
         model = ProductCategory
-        #fields = ['code','name','percent_discount']
-        fields = '__all__'
+        fields = ['name', 'percent_discount']

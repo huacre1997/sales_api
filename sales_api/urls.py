@@ -23,15 +23,15 @@ from rest_framework import permissions
 # Swagger -> https://drf-yasg.readthedocs.io/en/stable/
 schema_view = get_schema_view(
     openapi.Info(
-        title="Snippets API",
+        title="Sales API",
         default_version='v1',
-        description="Test description",
+        description="API Rest para distribuidora",
         terms_of_service="https://www.google.com/policies/terms/",
-        contact=openapi.Contact(email="contact@snippets.local"),
+        contact=openapi.Contact(email="huacreenciso97@gmail.com"),
         license=openapi.License(name="BSD License"),
     ),
     public=True,
-    permission_classes=[permissions.AllowAny],
+    permission_classes=(permissions.AllowAny,),
 )
 
 # repath -> Soporta url's con formato regex
