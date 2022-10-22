@@ -104,7 +104,7 @@ class Product(ModelBase):
     """
     Clase de Producto
     """
-    code = models.CharField(max_length=5, unique=True, verbose_name="Código")
+    code = models.CharField(max_length=6, unique=True, verbose_name="Código")
     name = models.CharField(max_length=60, blank=False, verbose_name="Nombre")
 
     # foreign_key: categoría de producto
@@ -124,10 +124,10 @@ class Product(ModelBase):
                                                         MinValueValidator(0), MaxValueValidator(75)], verbose_name="Descuento (%)")
     # monto de descuento
     discount_amount = models.DecimalField(
-        max_digits=7, decimal_places=2, default=0, verbose_name="Monto Descuento")
+        max_digits=7, decimal_places=2, blank=True, verbose_name="Monto Descuento")
     # precio de venta
     sale_price = models.DecimalField(
-        max_digits=7, decimal_places=2, default=0, verbose_name="Precio de Venta")
+        max_digits=7, decimal_places=2, blank=True, default=0, verbose_name="Precio de Venta")
     # stock: PositiveIntegerField
     stock = models.PositiveIntegerField(default=0, verbose_name="Stock")
 

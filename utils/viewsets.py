@@ -5,13 +5,8 @@ from rest_framework import viewsets
 class BaseViewSet(viewsets.ModelViewSet):
     """Modelo Base que heredará a todas nuestras views """
 
-    def list(self, request):
-        """
-        Método que lista los objetos con estado True
-        """
-        data = self.get_queryset().filter(is_active=True)
-        data = self.get_serializer(data, many=True)
-        return Response(data.data)
+    def get_queryset(self):
+        return super().get_queryset().filter(is_active=True)
 
     def partial_update(self, request, pk=None):
         """
