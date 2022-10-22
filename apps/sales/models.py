@@ -135,7 +135,7 @@ class OrderDetail(ModelBase):
             self.product.sale_price = float(self.product.base_sale_price) - \
                 float(abs(self.discount_amount))
 
-        if (int(self.product.percent_discount) > int(self.product.product_category.percent_discount)):
+        else:
             # Calculamos el monto de descuento
             self.discount_amount = round(
                 (int(self.product.percent_discount) / 100) * float(self.product.base_sale_price), 2)
