@@ -1,26 +1,18 @@
+from django.db.models.functions import Round
 from rest_framework.decorators import action
 from rest_framework.viewsets import ModelViewSet
 from rest_framework.views import APIView
 from apps.sales.models import Delivery, Order, OrderDetail
 from apps.sales.api.serializers import DeliverySerializer, OrderSerializer, OrderDetailSerializer
 from rest_framework.permissions import IsAuthenticated
-from django.http import JsonResponse
-from django.db.models import Subquery, OuterRef, Sum
+from django.db.models import Subquery, OuterRef, Sum, F
 from rest_framework.response import Response
 from rest_framework import status
 
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import filters
 from utils.viewsets import BaseViewSet
-from rest_framework import pagination
 import datetime
-
-
-class CustomPagination(pagination.PageNumberPagination):
-    page_size = 5
-    page_size_query_param = 'page'
-    max_page_size = 50
-    page_query_param = 'p'
 
 
 class DeliveryViewSet(BaseViewSet):
@@ -41,6 +33,8 @@ class DeliveryViewSet(BaseViewSet):
     search_fields = ['address']
 
     ordering_fields = ['-id']
+
+    permission_classes = (IsAuthenticated,)
 
     @action(detail=True, methods=['put'], name='Eliminar entrega de producto')
     def desactivate(self, request, pk=None):
@@ -75,31 +69,49 @@ class OrderViewSet(ModelViewSet):
     # Obtenemos los datos que queremos devolver.
     queryset = Order.objects.all()
 
-    # Obtenemos los datos que queremos devolver.
-    pagination_class = CustomPagination
-
     # Le indicamos el serializer que debe utilizar para convertir los objetos a JSON.
     serializer_class = OrderSerializer
 
-    filter_backends = [DjangoFilterBackend,
-                       filters.SearchFilter, filters.OrderingFilter]
-    filterset_fields = ['code', "date", "delivery__date"]
-
-    search_fields = ['customer']
+    filter_backends = [filters.OrderingFilter]
 
     ordering_fields = ['id']
 
+    permission_classes = (IsAuthenticated,)
+
     def get_queryset(self):
-        """Soberescribimos el metodo con nuestro uqeryset personalizado"""
+        """Sobreescribimos el método con nuestro queryset personalizado"""
+
+        # Será utilizado para filtrar nuestra qs según lo params enviados
+        filtros = {}
+
+        # Capturamos los query params dela url
+        code = self.request.query_params.get('code')
+        date = self.request.query_params.get('date')
+        totalAmountHigherThan = self.request.query_params.get(
+            "totalAmountHigherThan")
+
+        # Generamos un dict con los query params
+        if code:
+            filtros["code"] = code
+        if date:
+            filtros["date"] = date
+        if totalAmountHigherThan:
+            filtros["total__gte"] = totalAmountHigherThan
+
         # annotate -> Agrega una columna extra al queryset
         # select_related -> Permite realizar una sola vez la consulta de algún FK
         # Subquery -> Permite agregar una subquery a nuestra queryset
+        # F -> Permite seleccionar los valores de la misma qs en otro cálculos que se necesiten
+        # Sum -> Permite realizar sumas de un conjunto de valores
+        # Round -> Permite rendondear valores de la qs
         s_qs = OrderDetail.objects.select_related("order").filter(
             order_id=OuterRef('pk')).values("order_id").annotate(total_discount=Sum("discount_amount")).annotate(total_subtotal=Sum("subtotal"))
         qs = (super().get_queryset().select_related("delivery", "customer")
               .annotate(total_discount=Subquery(s_qs.values('total_discount')[:1]))
               .annotate(total_subtotal=Subquery(s_qs.values('total_subtotal')[:1]))
-              )
+              .annotate(total_igv=Round(F("total_subtotal") * 18 / 100))
+              .annotate(total=Round(F("total_subtotal") + F("total_igv"), precision=2))
+              ).filter(**filtros)
         return qs
 
     def paginate(self, queryset):
@@ -114,7 +126,7 @@ class OrderViewSet(ModelViewSet):
         return Response(serializer.data)
 
     def list(self, request):
-        " Metodo que lista el queryset paginado"
+        "Método que lista el queryset paginado"
         queryset = self.get_queryset()
         return self.paginate(queryset)
 
@@ -217,7 +229,7 @@ class OrderDetailViewSet(BaseViewSet):
         IGV = 0
         queryset = OrderDetail.objects.all()
         for i in queryset:
-            IGV = 18*1/100
+            IGV = 18 * 1 / 100
             total = + i.subtotal
             my_json = {
                 "ID del pedido": i.order.id,

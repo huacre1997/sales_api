@@ -22,20 +22,17 @@ class OrderSerializer(ModelSerializer):
     """
     total_subtotal = serializers.FloatField()
     total_discount = serializers.FloatField()
+    total_igv = serializers.FloatField()
+    total = serializers.FloatField()
 
     class Meta:
         model = Order
         fields = ["id", "code", "date", "code",
-                  "total_discount", "total_subtotal"]
+                  "total_discount", "total_subtotal", "total_igv", "total"]
 
     def to_representation(self, instance):
         data = super().to_representation(instance)
-        if instance.total_subtotal:
-            data["igv"] = round(instance.total_subtotal * 18 / 100, 2)
-            data["total"] = round(data["igv"] + instance.total_subtotal, 2)
-        else:
-            data["igv"] = 0
-            data["total"] = 0
+
         data["customer"] = instance.customer.company_name
         data["date_delivery"] = instance.delivery.date
         return data
