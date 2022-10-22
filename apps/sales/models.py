@@ -134,14 +134,13 @@ class OrderDetail(ModelBase):
         # Porcentaje de descuento de la categoría
         percent_discount_category = self.product.product_category.percent_discount
 
-        if (percent_discount_product < percent_discount_category):
-            self.discount_amount = percent_discount_category
-        else:
-            self.discount_amount = percent_discount_product
-
         # Subtotal sin descuento
         subtotal = self.product.sale_price * self.quantity
 
+        if (percent_discount_product < percent_discount_category):
+            self.discount_amount = percent_discount_category * subtotal / 100
+        else:
+            self.discount_amount = percent_discount_product * subtotal / 100
         # Subtotal con descuento
-        self.subtotal = subtotal - self.discount_amount * subtotal / 100
+        self.subtotal = subtotal - self.discount_amount
         super(OrderDetail, self).save(*args, **kwargs)

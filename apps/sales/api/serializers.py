@@ -31,8 +31,8 @@ class OrderSerializer(ModelSerializer):
     def to_representation(self, instance):
         data = super().to_representation(instance)
         if instance.total_subtotal:
-            data["igv"] = instance.total_subtotal * 18 / 100
-            data["total"] = data["igv"] + instance.total_subtotal
+            data["igv"] = round(instance.total_subtotal * 18 / 100, 2)
+            data["total"] = round(data["igv"] + instance.total_subtotal, 2)
         else:
             data["igv"] = 0
             data["total"] = 0
