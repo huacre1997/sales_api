@@ -1,5 +1,6 @@
 from asyncio.windows_events import NULL
 from venv import create
+from rest_framework.decorators import action
 from rest_framework.viewsets import ModelViewSet
 from rest_framework.views import APIView
 from apps.sales.models import Delivery,Order,OrderDetail
@@ -12,10 +13,11 @@ from rest_framework import status
 
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import filters
+from utils.viewsets import BaseViewSet
 
 import datetime
 
-class DeliveryViewSet(ModelViewSet):
+class DeliveryViewSet(BaseViewSet):
     """
     Clase ViewSet de Delivery
     """
@@ -33,7 +35,31 @@ class DeliveryViewSet(ModelViewSet):
 
     ordering_fields = ['id']
 
-class OrderViewSet(ModelViewSet):
+    @action(detail=True, methods=['put'], name='Eliminar entrega de producto')
+    def desactivate(self, request, pk=None):
+        """
+        Método que cambia estado a False de la entrega de producto
+        """
+        self.instance = self.get_object()
+        if self.instance.is_active:
+            super().desactivate(request)
+            return Response({"message": "Entrega de producto eliminada"}, status=status.HTTP_200_OK)
+        else:
+            return Response({"message": "No existe esa Entrega de Producto"}, status=status.HTTP_200_OK)
+
+    @action(detail=True, methods=['put'], name='Restaurar Entrega')
+    def restore(self, request, pk=None):
+        """
+        Método que cambia estado a True de la Entrega de Producto
+        """
+        self.instance = self.get_object()
+        if not self.instance.is_active:
+            super().restore(request)
+            return Response({"message": "Entrega de Producto restaurada"}, status=status.HTTP_200_OK)
+        else:
+            return Response({"message": "Esa Entrega de Producto ya se encuentra activa"}, status=status.HTTP_200_OK)
+
+class OrderViewSet(BaseViewSet):
     """
     Clase ViewSet de Order
     """
@@ -75,14 +101,36 @@ class OrderViewSet(ModelViewSet):
             return Response(serializer_class.data, status=status.HTTP_201_CREATED)
         return Response(serializer_class.errors, status=status.HTTP_400_BAD_REQUEST)
 
-class OrderDetailViewSet(ModelViewSet):
+    @action(detail=True, methods=['put'], name='Eliminar pedido')
+    def desactivate(self, request, pk=None):
+        """
+        Método que cambia estado a False de la pedido
+        """
+        self.instance = self.get_object()
+        if self.instance.is_active:
+            super().desactivate(request)
+            return Response({"message": "Entrega de pedido eliminada"}, status=status.HTTP_200_OK)
+        else:
+            return Response({"message": "No existe ese pedido"}, status=status.HTTP_200_OK)
+
+    @action(detail=True, methods=['put'], name='Restaurar pedido')
+    def restore(self, request, pk=None):
+        """
+        Método que cambia estado a True del pedido
+        """
+        self.instance = self.get_object()
+        if not self.instance.is_active:
+            super().restore(request)
+            return Response({"message": "Entrega de pedido"}, status=status.HTTP_200_OK)
+        else:
+            return Response({"message": "Ese pedido ya se encuentra activo"}, status=status.HTTP_200_OK)
+
+class OrderDetailViewSet(BaseViewSet):
     """
     Clase ViewSet de Order
     """
-
     # Obtenemos los datos que queremos devolver.
     queryset = OrderDetail.objects.all()
-
     # Le indicamos el serializer que debe utilizar para convertir los objetos a JSON.
     serializer_class = OrderDetailSerializer
 
@@ -93,118 +141,52 @@ class OrderDetailViewSet(ModelViewSet):
 
     ordering_fields = ['id']
 
-class GetDeliveryWithToken(APIView):
+    def list(self, request):
+        # Note the use of `get_queryset()` instead of `self.queryset`
+        my_list = []
+        my_dict = {}
+        total = 0
+        IGV = 0
+        queryset = OrderDetail.objects.all()
+        for i in queryset:
+            IGV = 18*1/100
+            total =+ i.subtotal
+            my_json = {
+                "ID del pedido": i.order.id,
+                "Número de pedido": i.order.code,
+                "Fecha de pedido": i.order.created_at,
+                "Razón Social del cliente": i.order.customer.company_name,
+                "Fecha de entrega": i.order.delivery.date,
+                "Importe SubTotal": i.subtotal,
+                "IGV": IGV,
+                "Importe Total": total,
+                "Importe total de descuento": 1003882
+                }
+            my_dict.update(my_json)
+            my_list.append(my_dict)
+        serializer_class = my_list
+        return Response(serializer_class)
 
-    def get(self, request, format=None, id = 0, *args, **kwargs):
-        try:
-            delivery = Delivery.objects.get(id=id)
-        except Delivery.DoesNotExist:
-            pass
-        
-        delivery_serializer = DeliverySerializer(
-            delivery
-        )
+    @action(detail=True, methods=['put'], name='Eliminar detalle de pedido')
+    def desactivate(self, request, pk=None):
+        """
+        Método que cambia estado a False del detalle de pedido
+        """
+        self.instance = self.get_object()
+        if self.instance.is_active:
+            super().desactivate(request)
+            return Response({"message": "Entrega del detalle de pedido eliminada"}, status=status.HTTP_200_OK)
+        else:
+            return Response({"message": "No existe ese detalle de pedido"}, status=status.HTTP_200_OK)
 
-        payload = {
-            'delivery': delivery_serializer.data
-        }
-
-        return JsonResponse(payload)
-
-    def post(self, request, format=None):
-        serializer = DeliverySerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-    def put(self, request, pk, format=None):
-        post = self.get_object(pk)
-        serializer = DeliverySerializer(post, data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-    def delete(self, request, pk, format=None):
-        post = self.get_object(pk)
-        post.delete()
-        return Response(status=status.HTTP_204_NO_CONTENT)
-
-class GetOrderWithToken(APIView):
-
-    def get(self, request, format=None, id = 0, *args, **kwargs):
-
-        try:
-            order = Order.objects.get(id=id)
-        except Order.DoesNotExist:
-            pass
-        
-        order_serializer = OrderSerializer(
-            order
-        )
-
-        payload = {
-            'order': order_serializer.data
-        }
-
-        return JsonResponse(payload)
-
-    def post(self, request, format=None):
-        serializer = OrderSerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-    def put(self, request, pk, format=None):
-        post = self.get_object(pk)
-        serializer = OrderSerializer(post, data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-    def delete(self, request, pk, format=None):
-        post = self.get_object(pk)
-        post.delete()
-        return Response(status=status.HTTP_204_NO_CONTENT)
-
-class GetOrderDetailWithToken(APIView):
-
-    def get(self, request, format=None, id = 0, *args, **kwargs):
-
-        try:
-            order_detail = OrderDetail.objects.get(id=id)
-        except OrderDetail.DoesNotExist:
-            pass
-        
-        order_detail_serializer = OrderDetailSerializer(
-            order_detail
-        )
-
-        payload = {
-            'order_detail': order_detail_serializer.data
-        }
-
-        return JsonResponse(payload)
-
-    def post(self, request, format=None):
-        serializer = OrderDetailSerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-    def put(self, request, pk, format=None):
-        post = self.get_object(pk)
-        serializer = OrderDetailSerializer(post, data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-    def delete(self, request, pk, format=None):
-        post = self.get_object(pk)
-        post.delete()
-        return Response(status=status.HTTP_204_NO_CONTENT)
+    @action(detail=True, methods=['put'], name='Restaurar detalle de pedido')
+    def restore(self, request, pk=None):
+        """
+        Método que cambia estado a True del detalle de pedido
+        """
+        self.instance = self.get_object()
+        if not self.instance.is_active:
+            super().restore(request)
+            return Response({"message": "Entrega del detalle de pedido"}, status=status.HTTP_200_OK)
+        else:
+            return Response({"message": "Ese detalle de pedido ya se encuentra activo"}, status=status.HTTP_200_OK)
