@@ -53,6 +53,9 @@ class OrderDetailSerializer(ModelSerializer):
         if product.stock < quantity:
             raise serializers.ValidationError(
                 f'El stock es insuficiente para el producto {product.name}')
+        if not product.is_active:
+            raise serializers.ValidationError(
+                f'El producto {product.name} no se encuentra activo')
         return data
 
 
@@ -60,7 +63,8 @@ class OrderSearchSerializer(ModelSerializer):
     """
     Clase para convertir un objeto Order a un formato JSON.
     """
-    details = OrderDetailSerializer(many=True, read_only=True, source='orderdetail_set')
+    details = OrderDetailSerializer(
+        many=True, read_only=True, source='orderdetail_set')
 
     class Meta:
         model = Order
