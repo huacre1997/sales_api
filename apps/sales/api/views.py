@@ -1,9 +1,8 @@
 from django.db.models.functions import Round
 from rest_framework.decorators import action
 from rest_framework.viewsets import ModelViewSet
-from rest_framework.views import APIView
 from apps.sales.models import Delivery, Order, OrderDetail
-from apps.sales.api.serializers import DeliverySerializer, OrderSerializer, OrderDetailSerializer
+from apps.sales.api.serializers import DeliverySerializer, OrderSerializer, OrderDetailSerializer, OrderSearchSerializer
 from rest_framework.permissions import IsAuthenticated
 from django.db.models import Subquery, OuterRef, Sum, F
 from rest_framework.response import Response
@@ -98,6 +97,7 @@ class OrderViewSet(ModelViewSet):
         if totalAmountHigherThan:
             filtros["total__gte"] = totalAmountHigherThan
 
+        """{"code":1213123,"date":"21-22-22"}"""
         # annotate -> Agrega una columna extra al queryset
         # select_related -> Permite realizar una sola vez la consulta de algún FK
         # Subquery -> Permite agregar una subquery a nuestra queryset
@@ -113,6 +113,11 @@ class OrderViewSet(ModelViewSet):
               .annotate(total=Round(F("total_subtotal") + F("total_igv"), precision=2))
               ).filter(**filtros)
         return qs
+
+    def retrieve(self, request, *args, **kwargs):
+        instance = self.get_object()
+        serializer = OrderSearchSerializer(instance)
+        return Response(serializer.data)
 
     def paginate(self, queryset):
         """

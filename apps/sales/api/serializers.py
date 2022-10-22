@@ -2,7 +2,7 @@ from dataclasses import field
 from rest_framework.serializers import ModelSerializer
 from apps.sales.models import Delivery, Order, OrderDetail
 from rest_framework import serializers
-
+from apps.crm.api.serializers import CustomerSerializer
 from apps.warehouse.models import Product
 
 
@@ -53,4 +53,22 @@ class OrderDetailSerializer(ModelSerializer):
         if product.stock < quantity:
             raise serializers.ValidationError(
                 f'El stock es insuficiente para el producto {product.name}')
+        return data
+
+
+class OrderSearchSerializer(ModelSerializer):
+    """
+    Clase para convertir un objeto Order a un formato JSON.
+    """
+    details = OrderDetailSerializer(many=True, read_only=True, source='orderdetail_set')
+
+    class Meta:
+        model = Order
+        fields = ["id", "code", "date", "details"]
+
+    def to_representation(self, instance):
+        data = super().to_representation(instance)
+
+        data["customer"] = CustomerSerializer(instance.customer).data
+        data["delivery"] = DeliverySerializer(instance.delivery).data
         return data
