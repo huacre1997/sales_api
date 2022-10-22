@@ -6,8 +6,8 @@ from rest_framework import filters
 from rest_framework import viewsets
 from django_filters.rest_framework import DjangoFilterBackend
 from apps.crm.models import CustomerCategory, District, Customer
-from apps.crm.api.serializers import CustomerCategorySerializer, DistrictSerializer, CustomerSerializer
-from utils.viewsets import BaseViewSet
+from apps.crm.api.serializers import CustomerCategorySerializer, DistrictSerializer, CustomerSerializer, CustomerOrdersSerializer
+from utils.base.viewsets import BaseViewSet
 
 
 class CustomerCategoryViewSet(BaseViewSet):
@@ -129,9 +129,9 @@ class CustomerViewSet(BaseViewSet):
 
     filter_backends = [DjangoFilterBackend,
                        filters.SearchFilter, filters.OrderingFilter]
-    filterset_fields = ['company_name','ruc','customer_category_id']
+    filterset_fields = ['company_name', 'ruc', 'customer_category_id']
 
-    search_fields = ['company_name','ruc','customer_category_id']
+    search_fields = ['company_name', 'ruc', 'customer_category_id']
 
     ordering_fields = ['id']
 
@@ -158,3 +158,12 @@ class CustomerViewSet(BaseViewSet):
             return Response({"message": "Cliente restaurado"}, status=status.HTTP_200_OK)
         else:
             return Response({"message": "Ese cliente ya se encuentra activo"}, status=status.HTTP_200_OK)
+
+    @action(detail=True, methods=['get'], name='Obtener pedidos')
+    def get_orders(self, request, pk=None):
+        """
+        Método que cambia estado a True de la categoría de cliente
+        """
+        instance = self.get_object()
+        serializer = CustomerOrdersSerializer(instance)
+        return Response(serializer.data, status=status.HTTP_200_OK)

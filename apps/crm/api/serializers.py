@@ -1,6 +1,7 @@
 from rest_framework.serializers import ModelSerializer
 from apps.crm.models import CustomerCategory, District, Customer
-from utils.serializers import BaseSerializer
+from utils.constants import IGV
+from utils.base.serializers import BaseSerializer
 
 
 class CustomerCategorySerializer(BaseSerializer):
@@ -37,3 +38,28 @@ class CustomerSerializer(BaseSerializer):
         ret["district"] = obj.district.name
         ret["customer_category"] = obj.customer_category.name
         return ret
+
+
+class CustomerOrdersSerializer(ModelSerializer):
+    """
+    Clase para convertir un objeto Order a un formato JSON.
+    """
+    from apps.sales.api.serializers import OrderSearchSerializer
+
+    orders = OrderSearchSerializer(
+        many=True, read_only=True, source='order_set')
+
+    class Meta:
+        model = Customer
+        fields = ["id", "company_name", "orders"]
+
+    def to_representation(self, instance):
+        data = super().to_representation(instance)
+
+        data["customer_category"] = CustomerCategorySerializer(
+            instance.customer_category).data
+        # data["sub_total"] = sum(
+        #     [i["sub_total"] for i in data["orders"]])
+        # data["igv"] = data["sub_total"] * IGV / 100
+        # data["total"] = data["igv"] + data["sub_total"]
+        return data

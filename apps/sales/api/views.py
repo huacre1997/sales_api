@@ -1,16 +1,16 @@
 from django.db.models.functions import Round
-from rest_framework.decorators import action
-from rest_framework.viewsets import ModelViewSet
-from apps.sales.models import Delivery, Order, OrderDetail
-from apps.sales.api.serializers import DeliverySerializer, OrderSerializer, OrderDetailSerializer, OrderSearchSerializer
-from rest_framework.permissions import IsAuthenticated
 from django.db.models import Subquery, OuterRef, Sum, F
+from rest_framework.decorators import action
+from rest_framework import filters
+from rest_framework.viewsets import ModelViewSet
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework import status
-
 from django_filters.rest_framework import DjangoFilterBackend
-from rest_framework import filters
-from utils.viewsets import BaseViewSet
+from apps.sales.models import Delivery, Order, OrderDetail
+from apps.sales.api.serializers import DeliverySerializer, OrderSerializer, OrderDetailSerializer, OrderSearchSerializer
+from utils.base.viewsets import BaseViewSet
+from utils.constants import IGV
 import datetime
 
 
@@ -97,19 +97,18 @@ class OrderViewSet(ModelViewSet):
         if totalAmountHigherThan:
             filtros["total__gte"] = totalAmountHigherThan
 
-        """{"code":1213123,"date":"21-22-22"}"""
         # annotate -> Agrega una columna extra al queryset
         # select_related -> Permite realizar una sola vez la consulta de algún FK
         # Subquery -> Permite agregar una subquery a nuestra queryset
         # F -> Permite seleccionar los valores de la misma qs en otro cálculos que se necesiten
         # Sum -> Permite realizar sumas de un conjunto de valores
         # Round -> Permite rendondear valores de la qs
-        s_qs = OrderDetail.objects.select_related("order").filter(
+        s_qs = OrderDetail.objects.select_related("order", "product").filter(
             order_id=OuterRef('pk')).values("order_id").annotate(total_discount=Sum("discount_amount")).annotate(total_subtotal=Sum("subtotal"))
         qs = (super().get_queryset().select_related("delivery", "customer")
               .annotate(total_discount=Subquery(s_qs.values('total_discount')[:1]))
               .annotate(total_subtotal=Subquery(s_qs.values('total_subtotal')[:1]))
-              .annotate(total_igv=Round(F("total_subtotal") * 18 / 100))
+              .annotate(total_igv=Round(F("total_subtotal") * IGV / 100))
               .annotate(total=Round(F("total_subtotal") + F("total_igv"), precision=2))
               ).filter(**filtros)
         return qs

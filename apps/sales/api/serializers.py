@@ -64,7 +64,7 @@ class OrderSearchSerializer(ModelSerializer):
     Clase para convertir un objeto Order a un formato JSON.
     """
     details = OrderDetailSerializer(
-        many=True, read_only=True, source='orderdetail_set')
+        many=True, source='orderdetail_set')
 
     class Meta:
         model = Order
@@ -75,4 +75,25 @@ class OrderSearchSerializer(ModelSerializer):
 
         data["customer"] = CustomerSerializer(instance.customer).data
         data["delivery"] = DeliverySerializer(instance.delivery).data
+        data["total"] = sum([float(i["subtotal"]) for i in data["details"]])
+        data["total_discount"] = sum([float(i["discount_amount"]) for i in data["details"]])
+        return data
+
+
+class OrderCustomer(ModelSerializer):
+    """
+    Clase para convertir un objeto Order a un formato JSON.
+    """
+    details = OrderDetailSerializer(
+        many=True, read_only=True, source='orderdetail_set')
+
+    class Meta:
+        model = Order
+        fields = ["id", "code", "date", "code", "details"]
+
+    def to_representation(self, instance):
+        data = super().to_representation(instance)
+
+        data["customer"] = instance.customer.company_name
+        data["date_delivery"] = instance.delivery.date
         return data

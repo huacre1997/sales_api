@@ -4,7 +4,7 @@ from django.db import models
 # Importamos las clases MinValueValidator, MaxValueValidator para agregar validaciones al atributo "percent_discount"
 from django.core.validators import MinValueValidator, MaxValueValidator
 
-from utils.models import ModelBase
+from utils.base.models import ModelBase
 
 # Create your models here.
 

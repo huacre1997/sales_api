@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from apps.warehouse.models import ProductCategory, Product
-from utils.serializers import BaseSerializer
+from utils.base.serializers import BaseSerializer
 
 
 class ProductCategorySerializer(BaseSerializer):

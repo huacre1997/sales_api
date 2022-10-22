@@ -1,5 +1,5 @@
 from django.db import models
-from utils.models import ModelBase
+from utils.base.models import ModelBase
 
 
 class CustomerCategory(ModelBase):
@@ -26,12 +26,14 @@ class CustomerCategory(ModelBase):
         """
         # Nombre que recibirá nuestro modelo en la base de datos.
         db_table = "customer_category"
-        
+
         # Texto que aparecerá en nuestra aplicación.
         verbose_name = "Categoria del cliente"
-        
+
         # Texto que aparecerá en nuestra aplicación en plural.
         verbose_name_plural = "Categorías del cliente"
+
+        ordering = ["-id"]
 
 
 class District(ModelBase):
@@ -82,3 +84,4 @@ class Customer(ModelBase):
         db_table = "customer"
         verbose_name = "Cliente"
         verbose_name_plural = "Clientes"
+        ordering = ["-id"]

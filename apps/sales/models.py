@@ -3,7 +3,7 @@ from django.db import models
 # Importamos la clase District,Customer de la apps crm
 from apps.crm.models import District, Customer
 from apps.warehouse.models import Product
-from utils.models import ModelBase
+from utils.base.models import ModelBase
 
 
 class Delivery(ModelBase):
