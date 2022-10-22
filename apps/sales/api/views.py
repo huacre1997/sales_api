@@ -74,7 +74,7 @@ class OrderViewSet(ModelViewSet):
 
     # Obtenemos los datos que queremos devolver.
     queryset = Order.objects.all()
-    
+
     # Obtenemos los datos que queremos devolver.
     pagination_class = CustomPagination
 
@@ -89,7 +89,8 @@ class OrderViewSet(ModelViewSet):
 
     ordering_fields = ['id']
 
-    def list(self, request, *args, **kwargs):
+    def get_queryset(self):
+        """Soberescribimos el metodo con nuestro uqeryset personalizado"""
         # annotate -> Agrega una columna extra al queryset
         # select_related -> Permite realizar una sola vez la consulta de algún FK
         # Subquery -> Permite agregar una subquery a nuestra queryset
@@ -99,8 +100,23 @@ class OrderViewSet(ModelViewSet):
               .annotate(total_discount=Subquery(s_qs.values('total_discount')[:1]))
               .annotate(total_subtotal=Subquery(s_qs.values('total_subtotal')[:1]))
               )
-        return Response(self.serializer_class(qs, many=True).data,
-                        status=status.HTTP_200_OK)
+        return qs
+
+    def paginate(self, queryset):
+        """
+            Genera el queryset paginado y lo envolvemos en una Respuesta.
+        """
+        page = self.paginate_queryset(queryset)
+        if page is not None:
+            serializer = self.get_serializer(page, many=True)
+            return self.get_paginated_response(serializer.data)
+        serializer = self.get_serializer(queryset, many=True)
+        return Response(serializer.data)
+
+    def list(self, request):
+        " Metodo que lista el queryset paginado"
+        queryset = self.get_queryset()
+        return self.paginate(queryset)
 
     def create(self, request, format=None):
         try:
