@@ -1,6 +1,7 @@
-![API Store](https://gonzch.com/img/cloud/online_store/logo_api_store.png)
+![API Store](https://user-images.githubusercontent.com/53907643/197332440-0813ae79-ed8b-4d51-9ca3-317f3f90b998.jpg)
 
-# RESTful API - Online Store
+
+# RESTful API - DISTRIBUTOR SALE
 
 This is the official repository of the “ABC SAC” company's backend application.
 
@@ -11,87 +12,39 @@ The backend application is a RESTful API based on a wholesale distributor that s
 ## Content
 
 * [Tech Stack](#techstack)
-* [Architecture](#architecture)
-* [Code Structure](#code_structure)
 * [Requeriments](#requirements)
 * [Environment Variables](#env)
-* [Unit Test](#codeTest)
-* [Code Quality](#codeQuality)
 * [Database Entity Model](#dbmodel)
-* [Database Information](#dbinfo)
 * Endpoints:
-    * [API Login](#endpointLogin)
-    * [API Token](#endpointToken)
-    * [API Logout List](#endpointLogout)
-    * [API Customer List](#endpointCustomer)
-    * [API Customer Create](#endpointCustomer)
-    * [API Customer Search](#endpointCustomer)
-    * [API Customer Update](#endpointCustomer)
-    * [API Customer Desactive](#endpointCustomer)
-    * [API Customer Restore](#endpointCustomer)
-	* [API Customer Category List](#endpointCustomerCategory)
-	* [API Customer Category Create](#endpointCustomerCategory)
-	* [API Customer Category Update](#endpointCustomerCategory)
-	* [API Customer Category Desactive](#endpointCustomerCategory)
-	* [API Customer Category Restore](#endpointCustomerCategory)
-	* [API Customer Category Search](#endpointCustomerCategory)
-	* [API Delivery List](#endpointDelivery)
-	* [API Delivery Create](#endpointDelivery)
-	* [API Delivery Update](#endpointDelivery)
-	* [API Delivery Desactive](#endpointDelivery)
-	* [API Delivery Restore](#endpointDelivery)
-	* [API Delivery Search](#endpointDelivery)
-	* [API District List](#endpointDistrict)
-	* [API District Create](#endpointDistrict)
-	* [API District Update](#endpointDistrict)
-	* [API District Desactive](#endpointDistrict)
-	* [API District Restore](#endpointDistrict)
-	* [API District Search](#endpointDistrict)
-    * [API Order Detail List](#endpointOrderDetail)
-	* [API Order Detail Create](#endpointOrderDetail)
-	* [API Order Detail Update](#endpointOrderDetail)
-	* [API Order Detail Desactive](#endpointOrderDetail)
-	* [API Order Detail Restore](#endpointOrderDetail)
-	* [API Order Detail Search](#endpointOrderDetail)
-	* [API Order List](#endpointOrder)
-	* [API Order Create](#endpointOrder)
-	* [API Order Update](#endpointOrder)
-	* [API Order Desactive](#endpointOrder)
-	* [API Order Restore](#endpointOrder)
-	* [API Order Search](#endpointOrder)
-	* [API Product Category List](#endpointProductCategory)
-	* [API Product Category Create](#endpointProductCategory)
-	* [API Product Category Update](#endpointProductCategory)
-	* [API Product Category Desactive](#endpointProductCategory)
-	* [API Product Category Restore](#endpointProductCategory)
-	* [API Product Category Search](#endpointProductCategory)
-	* [API Product List](#endpointProduct)
-	* [API Product Create](#endpointProduct)
-	* [API Product Update](#endpointProduct)
-	* [API Product Desactive](#endpointProduct)
-	* [API Product Restore](#endpointProduct)
-	* [API Product Search](#endpointProduct)
-* [Postman API Platform](#postman)
+    * [API Home](#endpointHome)
+    * [API Customer List](#endpointCustomerList)
+    * [API Customer Create](#endpointCustomerCreate)
+    * [API Customer Search](#endpointCustomerSearch)
+    * [API Customer Update](#endpointCustomerUpdate)
+    * [API Customer Desactive](#endpointCustomerDesactive)
+    * [API Customer Restore](#endpointCustomerRestore)
+	* [API Order List](#endpointOrderList)
+	* [API Order Create](#endpointOrderCreate)
+	* [API Order Update](#endpointOrderUpdate)
+	* [API Order Search](#endpointOrderSearch)
+	* [API Product List](#endpointProductList)
+	* [API Product Create](#endpointProductCreate)
+	* [API Product Update](#endpointProductUpdate)
+	* [API Product Desactive](#endpointProductDesactive)
+	* [API Product Restore](#endpointProductRestore)
 
 <a name="techstack"></a>
 ## Tech Stack
 
 - **RESTful API:** RESTful API written in Python on the Django framework.
 - **Transactional Database:** MySQL Server version 8.0.30
-- JWT encrypted with public/private key using RSA algorithm.
-
-<a name="architecture"></a>
-## Architecture
-
-The architecture implemented consists of:
-
-![image Arquitectura Backend](https://gonzch.com/img/cloud/online_store/arquitectura_backend_products.png)
+- JWT encrypted with public/private key using HS256 algorithm.
 
 ### Architecture Components
 
 * **RESTful API:** Backend application that implements a communication interface so that external applications can consume information related to the company's products.
 
-* **MySQL Database:** Transactional database, where in addition to products, it can manage purchase orders, sales, delivery, customers, suppliers, billing, collections, among other information entities.
+* **MySQL Database:** Transactional database, where in addition to products, it can manage purchase orders, sales, delivery, customers, suppliers, collections, among other information entities.
 
 ### About Communication
 
@@ -99,11 +52,6 @@ The architecture implemented consists of:
 
 * The **JWT** issued by the backend application is signed with a private key using
 the **HS256 algorithm**.
-
-<a name="code_structure"></a>
-## Code Structure
-
-![image Code Structure](https://gonzch.com/img/cloud/online_store/code_structure_v1.png)
 
 <a name="requirements"></a>
 ## Requirements
@@ -114,70 +62,54 @@ the **HS256 algorithm**.
 <a name="npm"></a>
 ## Python Libraries
 
-asgiref==3.5.2
-autopep8==1.7.0
-certifi==2022.9.24
-charset-normalizer==2.1.1
-coreapi==2.3.3
-coreschema==0.0.4
-Django==4.1.2
-django-cors-headers==3.13.0
-django-debug-toolbar==3.7.0
-django-filter==22.1
-djangorestframework==3.14.0
-djangorestframework-simplejwt==5.2.1
-drf-yasg==1.21.4
-idna==3.4
-inflection==0.5.1
-itypes==1.2.0
-Jinja2==3.1.2
-MarkupSafe==2.1.1
-mysqlclient==2.1.1
-packaging==21.3
-pycodestyle==2.9.1
-PyJWT==2.5.0
-pyparsing==3.0.9
-pytz==2022.4
-requests==2.28.1
-ruamel.yaml==0.17.21
-ruamel.yaml.clib==0.2.7
-sqlparse==0.4.3
-toml==0.10.2
-tzdata==2022.5
-uritemplate==4.1.1
-urllib3==1.26.12
+- asgiref==3.5.2
+- autopep8==1.7.0
+- certifi==2022.9.24
+- charset-normalizer==2.1.1
+- coreapi==2.3.3
+- coreschema==0.0.4
+- Django==4.1.2
+- django-cors-headers==3.13.0
+- django-debug-toolbar==3.7.0
+- django-filter==22.1
+- djangorestframework==3.14.0
+- djangorestframework-simplejwt==5.2.1
+- drf-yasg==1.21.4
+- idna==3.4
+- inflection==0.5.1
+- itypes==1.2.0
+- Jinja2==3.1.2
+- MarkupSafe==2.1.1
+- mysqlclient==2.1.1
+- packaging==21.3
+- pycodestyle==2.9.1
+- PyJWT==2.5.0
+- pyparsing==3.0.9
+- pytz==2022.4
+- requests==2.28.1
+- ruamel.yaml==0.17.21
+- ruamel.yaml.clib==0.2.7
+- sqlparse==0.4.3
+- toml==0.10.2
+- tzdata==2022.5
+- uritemplate==4.1.1
+- urllib3==1.26.12
 
 <a name="env"></a>
 ## Environment Variables
 
 ```bash
-# APP
-APP_URL=http://localhost:8000
-
-# ROWS_PER_PAGE
-APP_ROWS_PER_PAGE=5
-
-# SERVER
-SERVER_PORT=8000
-
 # ORIGIN CORS
-ORIGIN_URL='http://localhost:8000'
-
-# JWT AUTH TOKEN
-TOKEN_EXPIRE_TIME='90min'
-TOKEN_ALGORITHM='HS256'
+CORS_ORIGIN_WHITELIST ='http://localhost:8000'
 
 # TRANSACTIONAL DATABASE
-DB_MYSQL_HOST=''
-DB_MYSQL_USER=''
-DB_MYSQL_PASS=''
+DB_MYSQL_HOST='localhost'
+DB_MYSQL_USER='admin'
+DB_MYSQL_PASS='Setiembref2%'
 DB_MYSQL_PORT=3306
-DB_MYSQL_DB='db'
-DB_MYSQL_CONNECTION_LIMIT=100
+DB_MYSQL_DB='sales_api'
 ```
 
-
-REST API in production: 
 
 # Project Documentation
 
@@ -188,37 +120,13 @@ The company works with a relational transactional database to store and organize
 
 Therefore, a basic entity model of a relational database was defined to cover the scope of the project: develop an API to consume information from the products of the distribution company.
 
-![image Model Database](https://gonzch.com/img/cloud/online_store/model_database.png)
+![Proyecto Django](https://user-images.githubusercontent.com/53907643/197333245-77840230-4dad-464e-bf83-9ba73211b132.png)
 
-For practical purposes, a database of 20,389 products was created for test. In the "db" folder of this repository you can download a backup of this database. 
 
-<a name="dbinfo"></a>
-### Database information
-
-Number of records per table
-
-![image Database Information](https://gonzch.com/img/cloud/online_store/db_01.jpg)
-
-Size of each table
-
-![image Database Information](https://gonzch.com/img/cloud/online_store/db_02.jpg)
-
-**Table: Product Category**
-
-![image Table Product Category](https://gonzch.com/img/cloud/online_store/db_03.jpg)
-
-**Table: Product**
-
-Fragment of the products table content
-
-![image Table Product](https://gonzch.com/img/cloud/online_store/db_04.jpg)
-
-**Table: User**
-
-![image Table Product](https://gonzch.com/img/cloud/online_store/db_05.jpg)
-
+<a name="endpointHome"></a>
 ## Endpoints
 
+<a name="endpointCustomerList"></a>
 ### Endpoint: Customer List
 ```
 GET /customer
@@ -281,7 +189,7 @@ Example Response:
     ]
 }
 ```
-
+<a name="endpointCustomerCreate"></a>
 ### Endpoint: Customer Create
 ```
 POST /customer/
@@ -292,7 +200,7 @@ Body:
 
 ```json
 {
-    "company_name": 'Supermarket Las Vegas',
+    "company_name": "Supermarket Las Vegas",
     "ruc": 20115245110,
     "costumer_category": 3,
     "district": 3,
@@ -310,7 +218,7 @@ Response:
     "updated_at": "22-10-22 02:03:30"
 }
 ```
-
+<a name="endpointCustomerSearch"></a>
 ### Endpoint: Customer Search
 ```
 GET /customer/3/
@@ -330,7 +238,7 @@ Example Response:
     "updated_at": "22-10-22 02:02:31"
 }
 ```
-
+<a name="endpointCustomerUpdate"></a>
 ### Endpoint: Customer Update
 ```
 PATH /customer/3/
@@ -345,7 +253,7 @@ Example Response:
     "ruc": "20365265851",
 }
 ```
-
+<a name="endpointCustomerDesactive"></a>
 ### Endpoint: Customer Update
 ```
 PUT /customer/3/desactivate/
@@ -357,7 +265,7 @@ Example Response:
 ```json
 {"message": "Cliente eliminado"}
 ```
-
+<a name="endpointCustomerRestore"></a>
 ### Endpoint: Customer Update
 ```
 PUT /customer/3/restore/
@@ -370,7 +278,7 @@ Example Response:
 {"message": "Cliente restaurado"}
 ```
 
-
+<a name="endpointProductList"></a>
 ### Endpoint: Product List
 ```
 GET /products/
@@ -418,7 +326,7 @@ Example Response:
     ]
 }
 ```
-
+<a name="endpointProductCreate"></a>
 ### Endpoint: Product Create
 ```
 POST /products/
@@ -458,12 +366,71 @@ Response:
         "currency": 1
     }
 ```
+<a name="endpointProductDesactive"></a>
+### Endpoint: Product Update
+```
+PUT /products/1/desactivate/
+```
+This endpoint is used to disable the product.
 
+Response:
+
+```json
+{"message": "Producto eliminado"}
+```
+
+<a name="endpointProductRestore"></a>
+### Endpoint: Product Update
+```
+PUT /products/2/restore/
+```
+This endpoint is used to restore the product.
+
+Response:
+
+```json
+{"message": "Producto restaurado"}
+```
+
+<a name="endpointProductUpdate"></a>
+### Endpoint: Product Update
+```
+PATH /products/6/
+```
+This endpoint is used to update the product.
+
+Body:
+```json
+    {
+        "percent_discount": 5
+
+    }
+```
+Response:
+
+```json
+	{
+        "id": 2,
+        "updated_at": "22-10-22 03:09:14",
+        "code": "100002",
+        "name": "AZÚCAR RUBIA BOLSA 10KG",
+        "base_sale_price": "38.50",
+        "percent_discount": 5,
+        "discount_amount": "1.93",
+        "sale_price": "36.57",
+        "stock": 77,
+        "updated_by": "toshi",
+        "product_category": 1,
+        "unit_measure": 2,
+        "currency": 1
+    }
+```
+<a name="endpointOrderList"></a>
 ### Endpoint: Order List
 ```
 GET /order/
 ```
-This endpoint is used to return the order and its details.
+This endpoint is used to return the order.
 
 Example Response:
 
@@ -520,7 +487,7 @@ Example Response:
     ]
 }
 ```
-
+<a name="endpointOrderCreate"></a>
 ### Endpoint: Order Create
 ```
 POST /order/
@@ -560,7 +527,7 @@ Response:
 	"mensaje": "Orden creada exitosamente"
 }
 ```
-
+<a name="endpointOrderUpdate"></a>
 ### Endpoint: Order Update
 ```
 PUT /order/1/
@@ -585,7 +552,7 @@ Response:
 
 ```json
 ```
-
+<a name="endpointOrderSearch"></a>
 ### Endpoint: Order Search
 ```
 GET /order/1/

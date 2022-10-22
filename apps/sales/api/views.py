@@ -55,7 +55,7 @@ class DeliveryViewSet(BaseViewSet):
         self.instance = self.get_object()
         if not self.instance.is_active:
             super().restore(request)
-            return Response({"message": "Entrega de Producto restaurada"}, status=status.HTTP_200_OK)
+            return Response({"message": "Entrega de Producto restaurado"}, status=status.HTTP_200_OK)
         else:
             return Response({"message": "Esa Entrega de Producto ya se encuentra activa"}, status=status.HTTP_200_OK)
 
@@ -191,7 +191,7 @@ class OrderViewSet(ModelViewSet):
         self.instance = self.get_object()
         if self.instance.is_active:
             super().desactivate(request)
-            return Response({"message": "Entrega de pedido eliminada"}, status=status.HTTP_200_OK)
+            return Response({"message": "Pedido eliminado"}, status=status.HTTP_200_OK)
         else:
             return Response({"message": "No existe ese pedido"}, status=status.HTTP_200_OK)
 
@@ -203,7 +203,7 @@ class OrderViewSet(ModelViewSet):
         self.instance = self.get_object()
         if not self.instance.is_active:
             super().restore(request)
-            return Response({"message": "Entrega de pedido"}, status=status.HTTP_200_OK)
+            return Response({"message": "Pedido restaurado"}, status=status.HTTP_200_OK)
         else:
             return Response({"message": "Ese pedido ya se encuentra activo"}, status=status.HTTP_200_OK)
 
