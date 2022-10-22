@@ -129,9 +129,9 @@ class CustomerViewSet(BaseViewSet):
 
     filter_backends = [DjangoFilterBackend,
                        filters.SearchFilter, filters.OrderingFilter]
-    filterset_fields = ['company_name','ruc']
+    filterset_fields = ['company_name','ruc','customer_category_id']
 
-    search_fields = ['company_name','ruc']
+    search_fields = ['company_name','ruc','customer_category_id']
 
     ordering_fields = ['id']
 
