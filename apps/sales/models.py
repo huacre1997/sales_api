@@ -71,7 +71,8 @@ class Order(ModelBase):
     # foreign_key: Entrega
     delivery = models.ForeignKey(Delivery, on_delete=models.CASCADE,
                                  default=None, verbose_name="Entrega")
-
+    date = models.DateField(null=False, blank=False,
+                            verbose_name="Fecha de la orden")
     # Atributo "status" => columna "status" de la tabla
     # Estado del pedido
     # Activo: BooleanField
@@ -84,6 +85,7 @@ class Order(ModelBase):
         db_table = "order"
         verbose_name = "Pedido"
         verbose_name_plural = "Pedidos"
+        ordering = ['-id']
 
 
 class OrderDetail(ModelBase):
@@ -126,28 +128,20 @@ class OrderDetail(ModelBase):
         """
         Sobre escribimos el método save de la clase Model.
         """
-        if (int(self.product.product_category.percent_discount) > int(self.product.percent_discount)):
-            # Calculamos el monto de descuento
-            self.discount_amount = round(
-                (int(self.product.product_category.percent_discount) / 100) * float(self.product.base_sale_price), 2)
+        # Porcentaje de descuento del producto
+        percent_discount_product = self.product.percent_discount
 
-            # Calculamos el precio de venta del producto
-            self.product.sale_price = float(self.product.base_sale_price) - \
-                float(abs(self.discount_amount))
+        # Porcentaje de descuento de la categoría
+        percent_discount_category = self.product.product_category.percent_discount
 
+        if (percent_discount_product < percent_discount_category):
+            self.discount_amount = percent_discount_category
         else:
-            # Calculamos el monto de descuento
-            self.discount_amount = round(
-                (int(self.product.percent_discount) / 100) * float(self.product.base_sale_price), 2)
+            self.discount_amount = percent_discount_product
 
-            # Calculamos el precio de venta del producto
-            self.product.sale_price = float(self.product.base_sale_price) - \
-                float(abs(self.discount_amount))
+        # Subtotal sin descuento
+        subtotal = self.product.sale_price * self.quantity
 
-        # Verificamos la cantidad del stock
-        if (self.product.stock > 0 and self.quantity <= self.product.stock):
-            # Descontamos la cantidad del stock
-            self.product.stock = self.product.stock - self.quantity
-
-        # Guardamos información del modelo
+        # Subtotal con descuento
+        self.subtotal = subtotal - self.discount_amount * subtotal / 100
         super(OrderDetail, self).save(*args, **kwargs)

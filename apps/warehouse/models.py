@@ -153,3 +153,4 @@ class Product(ModelBase):
         db_table = "product"
         verbose_name = "Producto"
         verbose_name_plural = "Productos"
+        ordering = ['-id']
