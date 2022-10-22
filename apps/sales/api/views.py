@@ -1,13 +1,11 @@
-from asyncio.windows_events import NULL
-from venv import create
 from rest_framework.decorators import action
 from rest_framework.viewsets import ModelViewSet
 from rest_framework.views import APIView
-from apps.sales.models import Delivery,Order,OrderDetail
-from apps.sales.api.serializers import DeliverySerializer,OrderSerializer,OrderDetailSerializer
+from apps.sales.models import Delivery, Order, OrderDetail
+from apps.sales.api.serializers import DeliverySerializer, OrderSerializer, OrderDetailSerializer
 from rest_framework.permissions import IsAuthenticated
 from django.http import JsonResponse
-
+from django.db.models import Subquery, OuterRef, Sum
 from rest_framework.response import Response
 from rest_framework import status
 
@@ -16,6 +14,7 @@ from rest_framework import filters
 from utils.viewsets import BaseViewSet
 
 import datetime
+
 
 class DeliveryViewSet(BaseViewSet):
     """
@@ -28,12 +27,13 @@ class DeliveryViewSet(BaseViewSet):
     # Le indicamos el serializer que debe utilizar para convertir los objetos a JSON.
     serializer_class = DeliverySerializer
 
-    filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
+    filter_backends = [DjangoFilterBackend,
+                       filters.SearchFilter, filters.OrderingFilter]
     filterset_fields = ['address']
 
     search_fields = ['address']
 
-    ordering_fields = ['id']
+    ordering_fields = ['-id']
 
     @action(detail=True, methods=['put'], name='Eliminar entrega de producto')
     def desactivate(self, request, pk=None):
@@ -59,7 +59,8 @@ class DeliveryViewSet(BaseViewSet):
         else:
             return Response({"message": "Esa Entrega de Producto ya se encuentra activa"}, status=status.HTTP_200_OK)
 
-class OrderViewSet(BaseViewSet):
+
+class OrderViewSet(ModelViewSet):
     """
     Clase ViewSet de Order
     """
@@ -70,36 +71,74 @@ class OrderViewSet(BaseViewSet):
     # Le indicamos el serializer que debe utilizar para convertir los objetos a JSON.
     serializer_class = OrderSerializer
 
-    filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
+    filter_backends = [DjangoFilterBackend,
+                       filters.SearchFilter, filters.OrderingFilter]
     filterset_fields = ['customer']
 
     search_fields = ['customer']
 
     ordering_fields = ['id']
 
+    def list(self, request, *args, **kwargs):
+        # annotate -> Agrega una columna extra al queryset
+        # select_related -> Permite realizar una sola vez la consulta de algún FK
+        # Subquery -> Permite agregar una subquery a nuestra queryset
+        s_qs = OrderDetail.objects.select_related("order").filter(
+            order_id=OuterRef('pk')).values("order_id").annotate(total_discount=Sum("discount_amount")).annotate(total_subtotal=Sum("subtotal"))
+        qs = (super().get_queryset().select_related("delivery", "customer")
+              .annotate(total_discount=Subquery(s_qs.values('total_discount')[:1]))
+              .annotate(total_subtotal=Subquery(s_qs.values('total_subtotal')[:1]))
+              )
+        return Response(self.serializer_class(qs, many=True).data,
+                        status=status.HTTP_200_OK)
+
     def create(self, request, format=None):
-        # Obtenemos todos los registros de la bd
-        all_records = Order.objects.all()
-        # Obtenemos la cantidad de registros de la bd
-        code_db = all_records.count()
-        # Sumamos 1 a la cantidad de registros de la bd
-        code_db = code_db + 1
-        # Añadimos ceros a la izquierda de code_db casteado a string
-        code_db_str = str(code_db).zfill(5)
+        try:
+            # Obtenemos todos los registros de la bd
+            all_records = Order.objects.all()
+            # Obtenemos la cantidad de registros de la bd
+            code_db = all_records.count()
+            # Sumamos 1 a la cantidad de registros de la bd
+            code_db = code_db + 1
+            # Añadimos ceros a la izquierda de code_db casteado a string
+            code_db_str = str(code_db).zfill(5)
 
-        # Obtenemos el año actual
-        date = datetime.date.today()
-        year = date.strftime("%Y")
-        year_str = str(year)
+            # Obtenemos el año actual
+            date = datetime.date.today()
+            year = date.strftime("%Y")
+            year_str = str(year)
+            # Concatenamos el año actual y el codigo
+            order_number = year_str + code_db_str
+            # Validamos los delivery
+            serializer_delivery = DeliverySerializer(
+                data=request.data["delivery"])
+            if serializer_delivery.is_valid():
+                delivery = serializer_delivery.save()
+            else:
+                return Response(serializer_delivery.errors, status=status.HTTP_400_BAD_REQUEST)
+            order = Order()
+            order.code = order_number
+            order.customer_id = request.data["cliente"]
+            order.delivery = delivery
+            order.save()
+            for i in (request.data["details"]):
+                obj = {
+                    "product": i["product"],
+                    "quantity": i["quantity"],
+                    "order": order.id
+                }
+                # Validamos el detalle de orden
+                serializer_detail = OrderDetailSerializer(data=obj)
+                if serializer_detail.is_valid():
+                    serializer_detail.save()
+                else:
+                    return Response(serializer_detail.errors, status=status.HTTP_400_BAD_REQUEST)
 
-        # Concatenamos el año y el numero de pedido
-        order_number = year_str + code_db_str
-        request.data['code'] = order_number
-        serializer_class = OrderSerializer(data=request.data)
-        if serializer_class.is_valid():
-            serializer_class.save()
-            return Response(serializer_class.data, status=status.HTTP_201_CREATED)
-        return Response(serializer_class.errors, status=status.HTTP_400_BAD_REQUEST)
+            return Response({"mensaje": "Orden creada exitosamente"}, status=status.HTTP_201_CREATED)
+
+        except Exception as e:
+            print(e)
+            return Response({"mensaje": "Ha ocurrido un error"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
     @action(detail=True, methods=['put'], name='Eliminar pedido')
     def desactivate(self, request, pk=None):
@@ -125,6 +164,7 @@ class OrderViewSet(BaseViewSet):
         else:
             return Response({"message": "Ese pedido ya se encuentra activo"}, status=status.HTTP_200_OK)
 
+
 class OrderDetailViewSet(BaseViewSet):
     """
     Clase ViewSet de Order
@@ -134,7 +174,8 @@ class OrderDetailViewSet(BaseViewSet):
     # Le indicamos el serializer que debe utilizar para convertir los objetos a JSON.
     serializer_class = OrderDetailSerializer
 
-    filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
+    filter_backends = [DjangoFilterBackend,
+                       filters.SearchFilter, filters.OrderingFilter]
     filterset_fields = ['order']
 
     search_fields = ['order']
@@ -150,7 +191,7 @@ class OrderDetailViewSet(BaseViewSet):
         queryset = OrderDetail.objects.all()
         for i in queryset:
             IGV = 18*1/100
-            total =+ i.subtotal
+            total = + i.subtotal
             my_json = {
                 "ID del pedido": i.order.id,
                 "Número de pedido": i.order.code,
@@ -161,7 +202,7 @@ class OrderDetailViewSet(BaseViewSet):
                 "IGV": IGV,
                 "Importe Total": total,
                 "Importe total de descuento": 1003882
-                }
+            }
             my_dict.update(my_json)
             my_list.append(my_dict)
         serializer_class = my_list
