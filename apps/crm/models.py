@@ -68,7 +68,7 @@ class Customer(ModelBase):
                            blank=False, unique=True, verbose_name="RUC")
 
     # foreign_key: Categoria del cliente
-    costumer_category = models.ForeignKey(CustomerCategory, on_delete=models.CASCADE,
+    customer_category = models.ForeignKey(CustomerCategory, on_delete=models.CASCADE,
                                           default=None, verbose_name="Categoria del Cliente")
 
     # foreign_key: Distrito

@@ -57,7 +57,7 @@ class Migration(migrations.Migration):
                 ('updated_at', models.DateTimeField(auto_now=True, null=True, verbose_name='Fecha de modificación')),
                 ('company_name', models.CharField(max_length=100, verbose_name='Razón social')),
                 ('ruc', models.CharField(max_length=11, unique=True, verbose_name='RUC')),
-                ('costumer_category', models.ForeignKey(default=None, on_delete=django.db.models.deletion.CASCADE, to='crm.customercategory', verbose_name='Categoria del Cliente')),
+                ('customer_category', models.ForeignKey(default=None, on_delete=django.db.models.deletion.CASCADE, to='crm.customercategory', verbose_name='Categoria del Cliente')),
                 ('created_by', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='+', to=settings.AUTH_USER_MODEL, verbose_name='Creado por')),
                 ('district', models.ForeignKey(default=None, on_delete=django.db.models.deletion.CASCADE, to='crm.district', verbose_name='Distrito')),
                 ('updated_by', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='+', to=settings.AUTH_USER_MODEL, verbose_name='Modificado por')),

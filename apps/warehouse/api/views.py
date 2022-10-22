@@ -1,19 +1,12 @@
-from email.policy import HTTP
-from rest_framework.viewsets import ModelViewSet
-from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework.decorators import action
+from rest_framework import permissions
+from rest_framework import status
+from rest_framework import filters
+from rest_framework import viewsets
+from django_filters.rest_framework import DjangoFilterBackend
 from apps.warehouse.models import ProductCategory
 from apps.warehouse.api.serializers import ProductCategorySerializer
-from rest_framework import permissions
-from django.http import JsonResponse
-from rest_framework.generics import GenericAPIView
-from rest_framework.response import Response
-from rest_framework import status
-from rest_framework.generics import ListAPIView
-from django_filters.rest_framework import DjangoFilterBackend
-from rest_framework import filters
-from drf_yasg.utils import swagger_auto_schema
-from rest_framework import viewsets
-from rest_framework.decorators import action
 
 
 class ProductCategoryViewSet(viewsets.ModelViewSet):

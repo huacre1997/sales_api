@@ -1,21 +1,19 @@
-from rest_framework.viewsets import ModelViewSet
-from rest_framework.views import APIView
-from apps.crm.models import CustomerCategory,District
-from apps.crm.api.serializers import CustomerCategorySerializer,DistrictSerializer
-from rest_framework.permissions import IsAuthenticated
-from django.http import JsonResponse
-
 from rest_framework.response import Response
+from rest_framework.decorators import action
+from rest_framework import permissions
 from rest_framework import status
-
-from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import filters
+from rest_framework import viewsets
+from django_filters.rest_framework import DjangoFilterBackend
+from apps.crm.models import CustomerCategory, District, Customer
+from apps.crm.api.serializers import CustomerCategorySerializer, DistrictSerializer, CustomerSerializer
+from utils.viewsets import BaseViewSet
 
-class CustomerCategoryViewSet(ModelViewSet):
+
+class CustomerCategoryViewSet(BaseViewSet):
     """
     Clase ViewSet de Customer Category
     """
-
     # Obtenemos los datos que queremos devolver.
     queryset = CustomerCategory.objects.all()
 
@@ -23,55 +21,42 @@ class CustomerCategoryViewSet(ModelViewSet):
     serializer_class = CustomerCategorySerializer
 
     # Configuración para que el VIEW sea utilizado por usuarios autenticados.
-    #permission_classes = [IsAuthenticated]
+    permission_classes = (permissions.IsAuthenticated,)
 
-    filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
+    filter_backends = [DjangoFilterBackend,
+                       filters.SearchFilter, filters.OrderingFilter]
     filterset_fields = ['name']
 
     search_fields = ['name']
 
     ordering_fields = ['id']
 
-class GetCustomerCategoryWithToken(APIView):
+    @action(detail=True, methods=['put'], name='Eliminar categoría de cliente')
+    def desactivate(self, request, pk=None):
+        """
+        Método que cambia estado a False de la categoría de cliente
+        """
+        self.instance = self.get_object()
+        if self.instance.is_active:
+            super().desactivate(request)
+            return Response({"message": "Categoría de cliente eliminada"}, status=status.HTTP_200_OK)
+        else:
+            return Response({"message": "No existe esa categoría de cliente"}, status=status.HTTP_200_OK)
 
-    def get(self, request, format=None, id = 0, *args, **kwargs):
-        try:
-            customer_category = CustomerCategory.objects.get(id=id)
-        except CustomerCategory.DoesNotExist:
-            pass
-        
-        customer_category_serializer = CustomerCategorySerializer(
-            customer_category
-        )
-
-        payload = {
-            'customer_category': customer_category_serializer.data
-        }
-
-        return JsonResponse(payload)
-
-    def post(self, request, format=None):
-        serializer = CustomerCategorySerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-    def put(self, request, pk, format=None):
-        post = self.get_object(pk)
-        serializer = CustomerCategorySerializer(post, data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-    def delete(self, request, pk, format=None):
-        post = self.get_object(pk)
-        post.delete()
-        return Response(status=status.HTTP_204_NO_CONTENT)
+    @action(detail=True, methods=['put'], name='Restaurar categoría')
+    def restore(self, request, pk=None):
+        """
+        Método que cambia estado a True de la categoría de cliente
+        """
+        self.instance = self.get_object()
+        if not self.instance.is_active:
+            super().restore(request)
+            return Response({"message": "Categoría de cliente restaurada"}, status=status.HTTP_200_OK)
+        else:
+            return Response({"message": "Esa categoría de cliente ya se encuentra activa"}, status=status.HTTP_200_OK)
 
 
-class DistrictViewSet(ModelViewSet):
+class DistrictViewSet(BaseViewSet):
     """
     Clase ViewSet de District
     """
@@ -83,57 +68,93 @@ class DistrictViewSet(ModelViewSet):
     serializer_class = DistrictSerializer
 
     # Configuración para que el VIEW sea utilizado por usuarios autenticados.
-    #permission_classes = [IsAuthenticated]
+    permission_classes = (permissions.IsAuthenticated,)
 
-    filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
+    filter_backends = [DjangoFilterBackend,
+                       filters.SearchFilter, filters.OrderingFilter]
     filterset_fields = ['name']
 
     search_fields = ['name']
 
     ordering_fields = ['id']
 
-class GetDistrictWithToken(APIView):
+    def partial_update(self, request, pk=None):
+        """
+        Método que actualiza parcialmente el distrito
+        """
+        instance = self.get_object()
+        # Sobrescribimos el método y modificamos el update_by
+        instance.updated_by = self.request.user
+        instance.save()
+        return super().partial_update(request)
 
-    def get(self, request, format=None, id = 0, *args, **kwargs):
+    @action(detail=True, methods=['put'], name='Eliminar distritos')
+    def desactivate(self, request, pk=None):
+        """
+        Método que cambia estado a False al distrito
+        """
+        self.instance = self.get_object()
+        if self.instance.is_active:
+            super().desactivate(request)
+            return Response({"message": "Distrito eliminado"}, status=status.HTTP_200_OK)
+        else:
+            return Response({"message": "No existe ese distrito"}, status=status.HTTP_200_OK)
 
-        try:
-            district = District.objects.get(id=id)
-        except District.DoesNotExist:
-            pass
-        
-        district_serializer = DistrictSerializer(
-            district
-        )
+    @action(detail=True, methods=['put'], name='Restaurar distrito')
+    def restore(self, request, pk=None):
+        """
+        Método que cambia estado a True del distrito
+        """
+        self.instance = self.get_object()
+        if not self.instance.is_active:
+            super().restore(self, request)
+            return Response({"message": "Distrito restaurado"}, status=status.HTTP_200_OK)
+        else:
+            return Response({"message": "Ese distrito ya se encuentra activo"}, status=status.HTTP_200_OK)
 
-        payload = {
-            'district': district_serializer.data
-        }
 
-        return JsonResponse(payload)
+class CustomerViewSet(BaseViewSet):
+    """
+    Clase ViewSet de Customer
+    """
 
-    def post(self, request, format=None):
-        serializer = DistrictSerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    # Obtenemos los datos que queremos devolver.
+    queryset = Customer.objects.select_related("district", "customer_category")
 
-    def put(self, request, pk, format=None):
-        post = self.get_object(pk)
-        serializer = DistrictSerializer(post, data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    # Le indicamos el serializer que debe utilizar para convertir los objetos a JSON.
+    serializer_class = CustomerSerializer
 
-    def delete(self, request, pk, format=None):
-        post = self.get_object(pk)
-        post.delete()
-        return Response(status=status.HTTP_204_NO_CONTENT)
+    # Configuración para que el VIEW sea utilizado por usuarios autenticados.
+    permission_classes = (permissions.IsAuthenticated,)
 
-class Logout(APIView):
-    permission_classes = [IsAuthenticated]
+    filter_backends = [DjangoFilterBackend,
+                       filters.SearchFilter, filters.OrderingFilter]
+    filterset_fields = ['company_name']
 
-    def get(self, request, format=None, *args, **kwargs):
-        request.user.auth_token.delete()
-        return Response(status=status.HTTP_204_NO_CONTENT)
+    search_fields = ['company_name']
+
+    ordering_fields = ['id']
+
+    @action(detail=True, methods=['put'], name='Eliminar clientes')
+    def desactivate(self, request, pk=None):
+        """
+        Método que cambia estado a False al cliente
+        """
+        self.instance = self.get_object()
+        if self.instance.is_active:
+            super().desactivate(request)
+            return Response({"message": "Cliente eliminado"}, status=status.HTTP_200_OK)
+        else:
+            return Response({"message": "No existe ese cliente"}, status=status.HTTP_200_OK)
+
+    @action(detail=True, methods=['put'], name='Restaurar cliente')
+    def restore(self, request, pk=None):
+        """
+        Método que cambia estado a True del cliente
+        """
+        self.instance = self.get_object()
+        if not self.instance.is_active:
+            super().restore(self, request)
+            return Response({"message": "Cliente restaurado"}, status=status.HTTP_200_OK)
+        else:
+            return Response({"message": "Ese cliente ya se encuentra activo"}, status=status.HTTP_200_OK)
