@@ -12,8 +12,15 @@ from rest_framework import status
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import filters
 from utils.viewsets import BaseViewSet
-
+from rest_framework import pagination
 import datetime
+
+
+class CustomPagination(pagination.PageNumberPagination):
+    page_size = 5
+    page_size_query_param = 'page'
+    max_page_size = 50
+    page_query_param = 'p'
 
 
 class DeliveryViewSet(BaseViewSet):
@@ -67,13 +74,16 @@ class OrderViewSet(ModelViewSet):
 
     # Obtenemos los datos que queremos devolver.
     queryset = Order.objects.all()
+    
+    # Obtenemos los datos que queremos devolver.
+    pagination_class = CustomPagination
 
     # Le indicamos el serializer que debe utilizar para convertir los objetos a JSON.
     serializer_class = OrderSerializer
 
     filter_backends = [DjangoFilterBackend,
                        filters.SearchFilter, filters.OrderingFilter]
-    filterset_fields = ['customer']
+    filterset_fields = ['code', "date", "delivery__date"]
 
     search_fields = ['customer']
 
@@ -119,6 +129,7 @@ class OrderViewSet(ModelViewSet):
             order = Order()
             order.code = order_number
             order.customer_id = request.data["cliente"]
+            order.date = request.data["date"]
             order.delivery = delivery
             order.save()
             for i in (request.data["details"]):
