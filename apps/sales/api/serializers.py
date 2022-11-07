@@ -4,6 +4,7 @@ from apps.sales.models import Delivery, Order, OrderDetail
 from rest_framework import serializers
 from apps.crm.api.serializers import CustomerSerializer
 from apps.warehouse.models import Product
+from rest_framework import status
 
 
 class DeliverySerializer(ModelSerializer):
@@ -52,10 +53,17 @@ class OrderDetailSerializer(ModelSerializer):
         product = data["product"]
         if product.stock < quantity:
             raise serializers.ValidationError(
-                f'El stock es insuficiente para el producto {product.name}')
+                {'product': f'El stock es insuficiente para el producto {product.name}'})
         if not product.is_active:
             raise serializers.ValidationError(
-                f'El producto {product.name} no se encuentra activo')
+                {'product': str(f'El producto {product.name} no se encuentra activo')})
+        return data
+    
+    def to_representation(self, instance):
+        data = super().to_representation(instance)
+
+        data["product_price"] = instance.product.sale_price
+   
         return data
 
 
@@ -76,7 +84,8 @@ class OrderSearchSerializer(ModelSerializer):
         data["customer"] = CustomerSerializer(instance.customer).data
         data["delivery"] = DeliverySerializer(instance.delivery).data
         data["total"] = sum([float(i["subtotal"]) for i in data["details"]])
-        data["total_discount"] = sum([float(i["discount_amount"]) for i in data["details"]])
+        data["total_discount"] = sum(
+            [float(i["discount_amount"]) for i in data["details"]])
         return data
 
 

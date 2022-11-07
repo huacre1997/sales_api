@@ -177,10 +177,9 @@ class OrderViewSet(ModelViewSet):
                 else:
                     return Response(serializer_detail.errors, status=status.HTTP_400_BAD_REQUEST)
 
-            return Response({"mensaje": "Orden creada exitosamente"}, status=status.HTTP_201_CREATED)
+            return Response({"mensaje": "Orden creada exitosamente", "data": OrderSearchSerializer(order).data}, status=status.HTTP_201_CREATED)
 
         except Exception as e:
-            print(e)
             return Response({"mensaje": "Ha ocurrido un error"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
     @action(detail=True, methods=['put'], name='Eliminar pedido')

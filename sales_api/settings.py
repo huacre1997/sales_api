@@ -60,6 +60,8 @@ LOCAL_APPS = [
     "apps.crm",
     "apps.sales",
     "apps.warehouse",
+    "apps.users",
+
 ]
 
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
@@ -107,26 +109,26 @@ WSGI_APPLICATION = 'sales_api.wsgi.application'
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
 # Base de datos my.cnf
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'OPTIONS': {
-            'read_default_file': 'my.cnf',
-            'init_command': 'SET default_storage_engine=INNODB; SET sql_mode="STRICT_TRANS_TABLES"'
-        },
-    }
-}
-
-# Base de datos para debugear
 # DATABASES = {
 #     'default': {
 #         'ENGINE': 'django.db.backends.mysql',
-#         'NAME': 'sales_api',
-#         'USER': 'root',
-#         'PASSWORD': '',
-#         'HOST': 'localhost',
+#         'OPTIONS': {
+#             'read_default_file': 'my.cnf',
+#             'init_command': 'SET default_storage_engine=INNODB; SET sql_mode="STRICT_TRANS_TABLES"'
+#         },
 #     }
 # }
+
+# Base de datos para debugear
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'sales_api_v2',
+        'USER': 'root',
+        'PASSWORD': '',
+        'HOST': 'localhost',
+    }
+}
 
 # Swagger
 # https://drf-yasg.readthedocs.io/en/stable/readme.html
@@ -214,3 +216,8 @@ STATICFILES_DIRS = [
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# Autenticación personalizada
+AUTHENTICATION_BACKENDS = ['apps.users.auth_backend.EmailBackend']
+
+AUTH_USER_MODEL = 'users.CustomUser'

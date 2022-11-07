@@ -144,7 +144,7 @@ class Product(ModelBase):
 
         # Calculamos el precio de venta
         self.sale_price = float(self.base_sale_price) - \
-            float(abs(self.discount_amount))
+            float(self.discount_amount)
 
         # Guardamos información del modelo
         super(Product, self).save(*args, **kwargs)
