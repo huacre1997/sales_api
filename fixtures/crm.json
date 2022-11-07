@@ -1,0 +1,185 @@
+[
+    {
+        "model": "crm.customercategory",
+        "pk": 1,
+        "fields": {
+            "is_active": true,
+            "created_at": "2022-10-21T18:52:29.931",
+            "updated_at": "2022-10-21T20:48:42.731",
+            "created_by": null,
+            "updated_by": null,
+            "name": "Restaurantes"
+        }
+    },
+    {
+        "model": "crm.customercategory",
+        "pk": 2,
+        "fields": {
+            "is_active": true,
+            "created_at": "2022-10-21T18:52:34.733",
+            "updated_at": "2022-10-21T18:52:34.733",
+            "created_by": null,
+            "updated_by": null,
+            "name": "Hoteles"
+        }
+    },
+    {
+        "model": "crm.customercategory",
+        "pk": 3,
+        "fields": {
+            "is_active": true,
+            "created_at": "2022-10-21T18:52:51.840",
+            "updated_at": "2022-10-21T20:48:20.096",
+            "created_by": null,
+            "updated_by": null,
+            "name": "PALTAS SAC"
+        }
+    },
+    {
+        "model": "crm.district",
+        "pk": 1,
+        "fields": {
+            "is_active": true,
+            "created_at": "2022-10-21T18:50:29.877",
+            "updated_at": "2022-10-21T18:50:29.877",
+            "created_by": null,
+            "updated_by": null,
+            "name": "Comas"
+        }
+    },
+    {
+        "model": "crm.district",
+        "pk": 2,
+        "fields": {
+            "is_active": true,
+            "created_at": "2022-10-21T18:50:37.329",
+            "updated_at": "2022-10-21T18:50:37.329",
+            "created_by": null,
+            "updated_by": null,
+            "name": "San Martín de Porres"
+        }
+    },
+    {
+        "model": "crm.district",
+        "pk": 3,
+        "fields": {
+            "is_active": true,
+            "created_at": "2022-10-21T18:50:45.218",
+            "updated_at": "2022-10-21T18:50:45.218",
+            "created_by": null,
+            "updated_by": null,
+            "name": "San Borja"
+        }
+    },
+    {
+        "model": "crm.district",
+        "pk": 4,
+        "fields": {
+            "is_active": true,
+            "created_at": "2022-10-21T18:50:53.676",
+            "updated_at": "2022-10-21T18:50:53.676",
+            "created_by": null,
+            "updated_by": null,
+            "name": "Miraflores"
+        }
+    },
+    {
+        "model": "crm.district",
+        "pk": 5,
+        "fields": {
+            "is_active": true,
+            "created_at": "2022-10-21T18:51:57.529",
+            "updated_at": "2022-10-21T18:51:57.529",
+            "created_by": null,
+            "updated_by": null,
+            "name": "Surquillo"
+        }
+    },
+    {
+        "model": "crm.district",
+        "pk": 6,
+        "fields": {
+            "is_active": true,
+            "created_at": "2022-10-21T18:52:09.557",
+            "updated_at": "2022-10-21T18:52:09.557",
+            "created_by": null,
+            "updated_by": null,
+            "name": "San Isidro"
+        }
+    },
+    {
+        "model": "crm.customer",
+        "pk": 1,
+        "fields": {
+            "is_active": true,
+            "created_at": "2022-10-21T19:12:37.327",
+            "updated_at": "2022-10-21T19:12:37.327",
+            "created_by": null,
+            "updated_by": null,
+            "company_name": "Cinco Tenedores",
+            "ruc": "20601145852",
+            "customer_category": 1,
+            "district": 6
+        }
+    },
+    {
+        "model": "crm.customer",
+        "pk": 2,
+        "fields": {
+            "is_active": true,
+            "created_at": "2022-10-21T19:15:20.704",
+            "updated_at": "2022-10-21T19:15:20.704",
+            "created_by": null,
+            "updated_by": null,
+            "company_name": "Okashi Restaurant",
+            "ruc": "20664585121",
+            "customer_category": 1,
+            "district": 4
+        }
+    },
+    {
+        "model": "crm.customer",
+        "pk": 3,
+        "fields": {
+            "is_active": false,
+            "created_at": "2022-10-21T19:16:27.808",
+            "updated_at": "2022-10-21T20:24:02.145",
+            "created_by": null,
+            "updated_by": null,
+            "company_name": "Hotel Palermo",
+            "ruc": "20365265851",
+            "customer_category": 2,
+            "district": 2
+        }
+    },
+    {
+        "model": "crm.customer",
+        "pk": 4,
+        "fields": {
+            "is_active": true,
+            "created_at": "2022-10-21T19:17:35.062",
+            "updated_at": "2022-10-21T19:17:35.062",
+            "created_by": null,
+            "updated_by": null,
+            "company_name": "Mini Market San Blas",
+            "ruc": "10426545201",
+            "customer_category": 3,
+            "district": 5
+        }
+    },
+    {
+        "model": "crm.customer",
+        "pk": 5,
+        "fields": {
+            "is_active": true,
+            "created_at": "2022-10-21T19:18:03.811",
+            "updated_at": "2022-10-21T19:18:03.811",
+            "created_by": null,
+            "updated_by": null,
+            "company_name": "Supermarket Las Vegas",
+            "ruc": "20115245110",
+            "customer_category": 3,
+            "district": 3
+        }
+    }
+]

@@ -1,0 +1,760 @@
+[
+    {
+        "model": "warehouse.currency",
+        "pk": 1,
+        "fields": {
+            "is_active": true,
+            "created_at": "2022-10-21T21:49:47.134",
+            "updated_at": "2022-10-21T21:49:47.134",
+            "created_by": null,
+            "updated_by": null,
+            "code": "PEN",
+            "symbol": "S/.",
+            "name": "Nuevo Sol"
+        }
+    },
+    {
+        "model": "warehouse.unitmeasurecategory",
+        "pk": 1,
+        "fields": {
+            "is_active": true,
+            "created_at": "2022-10-21T21:23:14.319",
+            "updated_at": "2022-10-21T21:23:14.319",
+            "created_by": null,
+            "updated_by": null,
+            "name": "Longitud"
+        }
+    },
+    {
+        "model": "warehouse.unitmeasurecategory",
+        "pk": 2,
+        "fields": {
+            "is_active": true,
+            "created_at": "2022-10-21T21:23:18.695",
+            "updated_at": "2022-10-21T21:23:18.696",
+            "created_by": null,
+            "updated_by": null,
+            "name": "Masa"
+        }
+    },
+    {
+        "model": "warehouse.unitmeasurecategory",
+        "pk": 3,
+        "fields": {
+            "is_active": true,
+            "created_at": "2022-10-21T21:23:37.551",
+            "updated_at": "2022-10-21T21:23:37.551",
+            "created_by": null,
+            "updated_by": null,
+            "name": "Tiempo"
+        }
+    },
+    {
+        "model": "warehouse.unitmeasurecategory",
+        "pk": 4,
+        "fields": {
+            "is_active": true,
+            "created_at": "2022-10-21T21:26:18.022",
+            "updated_at": "2022-10-21T21:26:18.022",
+            "created_by": null,
+            "updated_by": null,
+            "name": "Volumen"
+        }
+    },
+    {
+        "model": "warehouse.unitmeasure",
+        "pk": 1,
+        "fields": {
+            "is_active": true,
+            "created_at": "2022-10-21T21:41:54.436",
+            "updated_at": "2022-10-21T21:41:54.436",
+            "created_by": null,
+            "updated_by": null,
+            "name": "Litro",
+            "unit_measure_category": 4
+        }
+    },
+    {
+        "model": "warehouse.unitmeasure",
+        "pk": 2,
+        "fields": {
+            "is_active": true,
+            "created_at": "2022-10-21T21:42:13.960",
+            "updated_at": "2022-10-21T21:42:13.960",
+            "created_by": null,
+            "updated_by": null,
+            "name": "Bolsa",
+            "unit_measure_category": 2
+        }
+    },
+    {
+        "model": "warehouse.unitmeasure",
+        "pk": 3,
+        "fields": {
+            "is_active": true,
+            "created_at": "2022-10-21T21:42:26.985",
+            "updated_at": "2022-10-21T21:42:26.985",
+            "created_by": null,
+            "updated_by": null,
+            "name": "Caja",
+            "unit_measure_category": 2
+        }
+    },
+    {
+        "model": "warehouse.unitmeasure",
+        "pk": 4,
+        "fields": {
+            "is_active": true,
+            "created_at": "2022-10-21T21:43:33.901",
+            "updated_at": "2022-10-21T21:43:33.901",
+            "created_by": null,
+            "updated_by": null,
+            "name": "Paquete",
+            "unit_measure_category": 2
+        }
+    },
+    {
+        "model": "warehouse.unitmeasure",
+        "pk": 5,
+        "fields": {
+            "is_active": true,
+            "created_at": "2022-10-21T21:43:40.854",
+            "updated_at": "2022-10-21T21:43:40.854",
+            "created_by": null,
+            "updated_by": null,
+            "name": "Bolsa",
+            "unit_measure_category": 2
+        }
+    },
+    {
+        "model": "warehouse.unitmeasure",
+        "pk": 6,
+        "fields": {
+            "is_active": true,
+            "created_at": "2022-10-21T21:43:55.482",
+            "updated_at": "2022-10-21T21:43:55.482",
+            "created_by": null,
+            "updated_by": null,
+            "name": "Botella",
+            "unit_measure_category": 4
+        }
+    },
+    {
+        "model": "warehouse.unitmeasure",
+        "pk": 7,
+        "fields": {
+            "is_active": true,
+            "created_at": "2022-10-21T21:44:08.144",
+            "updated_at": "2022-10-21T21:44:08.144",
+            "created_by": null,
+            "updated_by": null,
+            "name": "Galonera",
+            "unit_measure_category": 4
+        }
+    },
+    {
+        "model": "warehouse.productcategory",
+        "pk": 1,
+        "fields": {
+            "is_active": true,
+            "created_at": "2022-10-21T05:29:24.007",
+            "updated_at": "2022-10-21T15:24:39.773",
+            "created_by": null,
+            "updated_by": null,
+            "name": "Embutidos",
+            "percent_discount": 0
+        }
+    },
+    {
+        "model": "warehouse.productcategory",
+        "pk": 2,
+        "fields": {
+            "is_active": true,
+            "created_at": "2022-10-21T05:29:33.599",
+            "updated_at": "2022-10-21T19:10:36.511",
+            "created_by": null,
+            "updated_by": null,
+            "name": "Bebidos",
+            "percent_discount": 0
+        }
+    },
+    {
+        "model": "warehouse.productcategory",
+        "pk": 3,
+        "fields": {
+            "is_active": true,
+            "created_at": "2022-10-21T05:29:42.532",
+            "updated_at": "2022-10-21T05:29:42.532",
+            "created_by": null,
+            "updated_by": null,
+            "name": "Verduras",
+            "percent_discount": 8.11
+        }
+    },
+    {
+        "model": "warehouse.productcategory",
+        "pk": 4,
+        "fields": {
+            "is_active": true,
+            "created_at": "2022-10-21T05:29:51.698",
+            "updated_at": "2022-10-21T05:29:51.698",
+            "created_by": null,
+            "updated_by": null,
+            "name": "Carnes",
+            "percent_discount": 0
+        }
+    },
+    {
+        "model": "warehouse.productcategory",
+        "pk": 5,
+        "fields": {
+            "is_active": true,
+            "created_at": "2022-10-21T18:00:44.473",
+            "updated_at": "2022-10-21T18:00:44.473",
+            "created_by": null,
+            "updated_by": null,
+            "name": "Frutas",
+            "percent_discount": 0
+        }
+    },
+    {
+        "model": "warehouse.productcategory",
+        "pk": 6,
+        "fields": {
+            "is_active": true,
+            "created_at": "2022-10-21T20:59:40.130",
+            "updated_at": "2022-10-21T21:17:05.262",
+            "created_by": null,
+            "updated_by": null,
+            "name": "Bebidas",
+            "percent_discount": 0
+        }
+    },
+    {
+        "model": "warehouse.productcategory",
+        "pk": 7,
+        "fields": {
+            "is_active": true,
+            "created_at": "2022-10-21T21:17:47.993",
+            "updated_at": "2022-10-21T21:17:47.993",
+            "created_by": null,
+            "updated_by": null,
+            "name": "Abarrotes",
+            "percent_discount": 6.25
+        }
+    },
+    {
+        "model": "warehouse.productcategory",
+        "pk": 8,
+        "fields": {
+            "is_active": true,
+            "created_at": "2022-10-21T21:18:20.494",
+            "updated_at": "2022-10-21T21:18:20.494",
+            "created_by": null,
+            "updated_by": null,
+            "name": "Aves y Huevos",
+            "percent_discount": 0
+        }
+    },
+    {
+        "model": "warehouse.productcategory",
+        "pk": 9,
+        "fields": {
+            "is_active": true,
+            "created_at": "2022-10-21T21:19:04.153",
+            "updated_at": "2022-10-21T21:19:04.153",
+            "created_by": null,
+            "updated_by": null,
+            "name": "Abarrotes",
+            "percent_discount": 0
+        }
+    },
+    {
+        "model": "warehouse.productcategory",
+        "pk": 10,
+        "fields": {
+            "is_active": true,
+            "created_at": "2022-10-21T21:19:11.438",
+            "updated_at": "2022-10-21T21:19:11.438",
+            "created_by": null,
+            "updated_by": null,
+            "name": "Lácteos",
+            "percent_discount": 8.45
+        }
+    },
+    {
+        "model": "warehouse.productcategory",
+        "pk": 11,
+        "fields": {
+            "is_active": true,
+            "created_at": "2022-10-21T21:19:20.941",
+            "updated_at": "2022-10-21T21:19:20.941",
+            "created_by": null,
+            "updated_by": null,
+            "name": "Limpieza",
+            "percent_discount": 0
+        }
+    },
+    {
+        "model": "warehouse.product",
+        "pk": 1,
+        "fields": {
+            "is_active": true,
+            "created_at": "2022-10-21T21:55:53.658",
+            "updated_at": "2022-11-06T17:00:22.566",
+            "created_by": null,
+            "updated_by": null,
+            "code": "23123",
+            "name": "GASEOSA INCA KOLA BOTELLA 1L",
+            "product_category": 6,
+            "unit_measure": 1,
+            "currency": 1,
+            "base_sale_price": "4.70",
+            "percent_discount": 5,
+            "discount_amount": "0.24",
+            "sale_price": "4.47",
+            "stock": 200
+        }
+    },
+    {
+        "model": "warehouse.product",
+        "pk": 2,
+        "fields": {
+            "is_active": true,
+            "created_at": "2022-10-21T22:01:09.790",
+            "updated_at": "2022-11-06T17:00:22.657",
+            "created_by": null,
+            "updated_by": null,
+            "code": "100002",
+            "name": "AZÚCAR RUBIA BOLSA 10KG",
+            "product_category": 7,
+            "unit_measure": 2,
+            "currency": 1,
+            "base_sale_price": "38.50",
+            "percent_discount": 5,
+            "discount_amount": "1.93",
+            "sale_price": "36.58",
+            "stock": 9959
+        }
+    },
+    {
+        "model": "warehouse.product",
+        "pk": 3,
+        "fields": {
+            "is_active": true,
+            "created_at": "2022-10-21T22:01:44.749",
+            "updated_at": "2022-11-06T17:00:22.626",
+            "created_by": null,
+            "updated_by": null,
+            "code": "100003",
+            "name": "ARROZ RENDIDOR BOLSA 10KG",
+            "product_category": 7,
+            "unit_measure": 2,
+            "currency": 1,
+            "base_sale_price": "42.50",
+            "percent_discount": 0,
+            "discount_amount": "0.00",
+            "sale_price": "42.50",
+            "stock": 9977
+        }
+    },
+    {
+        "model": "warehouse.product",
+        "pk": 4,
+        "fields": {
+            "is_active": true,
+            "created_at": "2022-10-21T22:02:32.497",
+            "updated_at": "2022-11-06T17:00:22.626",
+            "created_by": null,
+            "updated_by": null,
+            "code": "100004",
+            "name": "PALTA FUERTE CAJA 5KG",
+            "product_category": 5,
+            "unit_measure": 3,
+            "currency": 1,
+            "base_sale_price": "48.70",
+            "percent_discount": 5,
+            "discount_amount": "2.44",
+            "sale_price": "46.27",
+            "stock": 9924
+        }
+    },
+    {
+        "model": "warehouse.product",
+        "pk": 5,
+        "fields": {
+            "is_active": true,
+            "created_at": "2022-10-21T22:02:55.833",
+            "updated_at": "2022-10-21T22:02:55.833",
+            "created_by": null,
+            "updated_by": null,
+            "code": "100005",
+            "name": "HUEVOS DE GALLINA PAQUETE 15 UN",
+            "product_category": 8,
+            "unit_measure": 4,
+            "currency": 1,
+            "base_sale_price": "9.80",
+            "percent_discount": 0,
+            "discount_amount": "0.00",
+            "sale_price": "9.80",
+            "stock": 9999
+        }
+    },
+    {
+        "model": "warehouse.product",
+        "pk": 6,
+        "fields": {
+            "is_active": true,
+            "created_at": "2022-10-21T22:03:23.117",
+            "updated_at": "2022-10-21T22:03:23.117",
+            "created_by": null,
+            "updated_by": null,
+            "code": "100006",
+            "name": "AGUA MINERAL S/G PAQ. 6 UN 600ML",
+            "product_category": 6,
+            "unit_measure": 4,
+            "currency": 1,
+            "base_sale_price": "7.50",
+            "percent_discount": 0,
+            "discount_amount": "0.00",
+            "sale_price": "7.50",
+            "stock": 9999
+        }
+    },
+    {
+        "model": "warehouse.product",
+        "pk": 7,
+        "fields": {
+            "is_active": true,
+            "created_at": "2022-10-21T22:03:50.258",
+            "updated_at": "2022-11-06T17:00:22.657",
+            "created_by": null,
+            "updated_by": null,
+            "code": "100007",
+            "name": "PECHUGA ENTERA PAQ. 1KG",
+            "product_category": 8,
+            "unit_measure": 4,
+            "currency": 1,
+            "base_sale_price": "15.50",
+            "percent_discount": 10,
+            "discount_amount": "1.55",
+            "sale_price": "13.95",
+            "stock": 9495
+        }
+    },
+    {
+        "model": "warehouse.product",
+        "pk": 8,
+        "fields": {
+            "is_active": true,
+            "created_at": "2022-10-21T22:04:17.046",
+            "updated_at": "2022-10-21T22:04:17.046",
+            "created_by": null,
+            "updated_by": null,
+            "code": "100008",
+            "name": "PAPA AMARILLA PERUANITA BOLSA 5KG",
+            "product_category": 3,
+            "unit_measure": 2,
+            "currency": 1,
+            "base_sale_price": "43.80",
+            "percent_discount": 0,
+            "discount_amount": "0.00",
+            "sale_price": "40.25",
+            "stock": 9999
+        }
+    },
+    {
+        "model": "warehouse.product",
+        "pk": 9,
+        "fields": {
+            "is_active": true,
+            "created_at": "2022-10-21T22:04:47.129",
+            "updated_at": "2022-11-06T17:00:22.657",
+            "created_by": null,
+            "updated_by": null,
+            "code": "100009",
+            "name": "PAPA BLANCA BOLSA 5KG",
+            "product_category": 3,
+            "unit_measure": 2,
+            "currency": 1,
+            "base_sale_price": "26.80",
+            "percent_discount": 0,
+            "discount_amount": "0.00",
+            "sale_price": "26.80",
+            "stock": 9363
+        }
+    },
+    {
+        "model": "warehouse.product",
+        "pk": 10,
+        "fields": {
+            "is_active": true,
+            "created_at": "2022-10-21T22:05:09.871",
+            "updated_at": "2022-11-06T17:00:22.657",
+            "created_by": null,
+            "updated_by": null,
+            "code": "100010",
+            "name": "ACEITE VEGETAL BOTELLA 900ML",
+            "product_category": 7,
+            "unit_measure": 6,
+            "currency": 1,
+            "base_sale_price": "11.18",
+            "percent_discount": 5,
+            "discount_amount": "0.59",
+            "sale_price": "10.62",
+            "stock": 9255
+        }
+    },
+    {
+        "model": "warehouse.product",
+        "pk": 11,
+        "fields": {
+            "is_active": true,
+            "created_at": "2022-10-21T22:05:38.464",
+            "updated_at": "2022-10-21T22:05:38.464",
+            "created_by": null,
+            "updated_by": null,
+            "code": "100011",
+            "name": "FIDEO SPAGHETTI PAQUETE 1KG",
+            "product_category": 7,
+            "unit_measure": 4,
+            "currency": 1,
+            "base_sale_price": "5.60",
+            "percent_discount": 0,
+            "discount_amount": "0.00",
+            "sale_price": "5.25",
+            "stock": 9999
+        }
+    },
+    {
+        "model": "warehouse.product",
+        "pk": 12,
+        "fields": {
+            "is_active": true,
+            "created_at": "2022-10-21T22:06:12.726",
+            "updated_at": "2022-10-21T22:06:12.726",
+            "created_by": null,
+            "updated_by": null,
+            "code": "100012",
+            "name": "LECHE ENTERA PACK 6 UN 1L",
+            "product_category": 10,
+            "unit_measure": 4,
+            "currency": 1,
+            "base_sale_price": "32.50",
+            "percent_discount": 0,
+            "discount_amount": "0.00",
+            "sale_price": "29.75",
+            "stock": 9999
+        }
+    },
+    {
+        "model": "warehouse.product",
+        "pk": 13,
+        "fields": {
+            "is_active": true,
+            "created_at": "2022-10-21T22:06:37.607",
+            "updated_at": "2022-10-21T22:06:37.607",
+            "created_by": null,
+            "updated_by": null,
+            "code": "100013",
+            "name": "LECHE EVAPORADA PAQUETE 6 UN 400 ML",
+            "product_category": 10,
+            "unit_measure": 4,
+            "currency": 1,
+            "base_sale_price": "23.90",
+            "percent_discount": 0,
+            "discount_amount": "0.00",
+            "sale_price": "23.90",
+            "stock": 9999
+        }
+    },
+    {
+        "model": "warehouse.product",
+        "pk": 14,
+        "fields": {
+            "is_active": true,
+            "created_at": "2022-10-21T22:07:05.903",
+            "updated_at": "2022-10-21T22:07:05.903",
+            "created_by": null,
+            "updated_by": null,
+            "code": "100014",
+            "name": "LENTEJA BOLSA 1KG",
+            "product_category": 7,
+            "unit_measure": 5,
+            "currency": 1,
+            "base_sale_price": "9.30",
+            "percent_discount": 0,
+            "discount_amount": "0.00",
+            "sale_price": "9.30",
+            "stock": 9999
+        }
+    },
+    {
+        "model": "warehouse.product",
+        "pk": 15,
+        "fields": {
+            "is_active": true,
+            "created_at": "2022-10-21T22:07:42.617",
+            "updated_at": "2022-10-21T22:07:42.617",
+            "created_by": null,
+            "updated_by": null,
+            "code": "100015",
+            "name": "YOGURT FRUTADO BOTELLA 1L",
+            "product_category": 10,
+            "unit_measure": 6,
+            "currency": 1,
+            "base_sale_price": "10.70",
+            "percent_discount": 5,
+            "discount_amount": "0.54",
+            "sale_price": "10.16",
+            "stock": 9999
+        }
+    },
+    {
+        "model": "warehouse.product",
+        "pk": 16,
+        "fields": {
+            "is_active": true,
+            "created_at": "2022-10-21T22:08:05.434",
+            "updated_at": "2022-10-21T22:08:05.434",
+            "created_by": null,
+            "updated_by": null,
+            "code": "100016",
+            "name": "FRESA ENTERA CONGELADA BOLSA 1KG",
+            "product_category": 5,
+            "unit_measure": 5,
+            "currency": 1,
+            "base_sale_price": "11.20",
+            "percent_discount": 0,
+            "discount_amount": "0.00",
+            "sale_price": "11.20",
+            "stock": 9999
+        }
+    },
+    {
+        "model": "warehouse.product",
+        "pk": 17,
+        "fields": {
+            "is_active": true,
+            "created_at": "2022-10-21T22:08:31.933",
+            "updated_at": "2022-10-21T22:08:31.933",
+            "created_by": null,
+            "updated_by": null,
+            "code": "100017",
+            "name": "PIÑA GOLDEN CONGELADA BOLSA 1KG",
+            "product_category": 5,
+            "unit_measure": 5,
+            "currency": 1,
+            "base_sale_price": "15.19",
+            "percent_discount": 5,
+            "discount_amount": "0.76",
+            "sale_price": "14.43",
+            "stock": 9999
+        }
+    },
+    {
+        "model": "warehouse.product",
+        "pk": 18,
+        "fields": {
+            "is_active": true,
+            "created_at": "2022-10-21T22:09:07.221",
+            "updated_at": "2022-10-21T22:09:07.221",
+            "created_by": null,
+            "updated_by": null,
+            "code": "100018",
+            "name": "QUINUA BOLSA 1KG",
+            "product_category": 7,
+            "unit_measure": 5,
+            "currency": 1,
+            "base_sale_price": "13.95",
+            "percent_discount": 0,
+            "discount_amount": "0.00",
+            "sale_price": "13.95",
+            "stock": 9999
+        }
+    },
+    {
+        "model": "warehouse.product",
+        "pk": 19,
+        "fields": {
+            "is_active": true,
+            "created_at": "2022-10-21T22:09:39.321",
+            "updated_at": "2022-10-21T22:09:39.321",
+            "created_by": null,
+            "updated_by": null,
+            "code": "100019",
+            "name": "SAL DE MARAS BOLSA 500G",
+            "product_category": 9,
+            "unit_measure": 5,
+            "currency": 1,
+            "base_sale_price": "10.55",
+            "percent_discount": 0,
+            "discount_amount": "0.00",
+            "sale_price": "10.55",
+            "stock": 9999
+        }
+    },
+    {
+        "model": "warehouse.product",
+        "pk": 20,
+        "fields": {
+            "is_active": true,
+            "created_at": "2022-10-21T22:10:07.667",
+            "updated_at": "2022-10-21T22:10:07.667",
+            "created_by": null,
+            "updated_by": null,
+            "code": "100020",
+            "name": "LAVAVAJILLAS LIQUIDO LIMON GALONERA 4L",
+            "product_category": 11,
+            "unit_measure": 7,
+            "currency": 1,
+            "base_sale_price": "36.85",
+            "percent_discount": 15,
+            "discount_amount": "5.53",
+            "sale_price": "31.32",
+            "stock": 9999
+        }
+    },
+    {
+        "model": "warehouse.product",
+        "pk": 21,
+        "fields": {
+            "is_active": true,
+            "created_at": "2022-10-21T22:10:34.403",
+            "updated_at": "2022-10-21T22:10:34.403",
+            "created_by": null,
+            "updated_by": null,
+            "code": "100021",
+            "name": "LIMPIADOR ANTIGRASA BOTELLA 1L",
+            "product_category": 11,
+            "unit_measure": 6,
+            "currency": 1,
+            "base_sale_price": "32.00",
+            "percent_discount": 0,
+            "discount_amount": "0.00",
+            "sale_price": "32.00",
+            "stock": 9999
+        }
+    },
+    {
+        "model": "warehouse.product",
+        "pk": 22,
+        "fields": {
+            "is_active": true,
+            "created_at": "2022-10-21T22:11:05.381",
+            "updated_at": "2022-10-21T22:11:05.381",
+            "created_by": null,
+            "updated_by": null,
+            "code": "100022",
+            "name": "TROZOS DE ATUN PAQ. 6 UN LATA 170G",
+            "product_category": 9,
+            "unit_measure": 4,
+            "currency": 1,
+            "base_sale_price": "28.95",
+            "percent_discount": 10,
+            "discount_amount": "2.90",
+            "sale_price": "26.05",
+            "stock": 9999
+        }
+    }
+]
